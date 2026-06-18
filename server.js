@@ -915,6 +915,10 @@ app.use((req, res) => {
     );
 });
 
+app.get("/", (req, res) => {
+    res.send("API Bioskop Berjalan");
+});
+
 // Menjalankan server
 app.listen(PORT, () => {
     console.log(
