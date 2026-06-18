@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin Bioskop</title>
+
+    <link rel="stylesheet" href="/admin.css">
+    <script defer src="/admin.js"></script>
+</head>
+<body>
+<button class="menu-toggle">
+    ☰
+</button>
+<div class="wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🎬 CinemaKu
+        </div>
+
+        <nav>
+
+            <a href="/panel-admin" class="active">
+                Dashboard
+            </a>
+
+            <a href="/panel-admin/transaksi">
+                Transaksi
+            </a>
+
+            <a href="/panel-admin/customer">
+                Pelanggan
+            </a>
+
+        </nav>
+
+        <button id="logoutButton">
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <!-- navbar -->
+        <header class="topbar">
+
+            <div>
+                <h1>Dashboard Admin</h1>
+                <p>Kelola film dan transaksi bioskop</p>
+            </div>
+
+        </header>
+
+
+        <!-- statistik -->
+        <section class="cards">
+
+            <div class="card">
+                <span>Jumlah Film</span>
+                <h2 id="movieCount">0</h2>
+            </div>
+
+            <div class="card">
+                <span>Total Transaksi</span>
+                <h2 id="bookingCount">0</h2>
+            </div>
+
+            <div class="card">
+                <span>Pendapatan</span>
+                <h2 id="totalRevenue">Rp0</h2>
+            </div>
+
+        </section>
+
+
+        <!-- form -->
+        <section class="box">
+
+            <h2>Tambah Film Baru</h2>
+
+            <form id="addMovieForm">
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Judul Film"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="genre"
+                    placeholder="Genre"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="duration"
+                    placeholder="Durasi (Menit)"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="schedule"
+                    placeholder="Jadwal Tayang"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="price"
+                    placeholder="Harga Tiket"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="availableSeats"
+                    placeholder="Jumlah Kursi"
+                    required
+                >
+
+                <button type="submit">
+                    Tambah Film
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- tabel -->
+        <section class="box">
+
+            <h2>Daftar Film</h2>
+
+            <table>
+
+                <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Judul</th>
+                    <th>Genre</th>
+                    <th>Jadwal</th>
+                    <th>Kursi</th>
+                    <th>Harga</th>
+                    <th>Aksi</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="movieTable">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+</html>

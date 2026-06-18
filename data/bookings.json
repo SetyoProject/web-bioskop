@@ -1,0 +1,46 @@
+[
+  {
+    "id": "BK-20260618-4789",
+    "customerName": "Muhammad Tri Setyo Utomo",
+    "phoneNumber": "0895338079006",
+    "paymentMethod": "Transfer Bank",
+    "items": [
+      {
+        "movieId": 1,
+        "title": "Avengers Endgame",
+        "price": 50000,
+        "quantity": 3,
+        "subtotal": 150000
+      }
+    ],
+    "total": 150000,
+    "status": "Diproses",
+    "createdAt": "2026-06-18T18:15:35.054Z",
+    "updatedAt": "2026-06-18T18:31:47.705Z"
+  },
+  {
+    "id": "BK-20260618-7523",
+    "customerName": "adittt0",
+    "phoneNumber": "0987654",
+    "paymentMethod": "QRIS",
+    "items": [
+      {
+        "movieId": 1,
+        "title": "Avengers Endgame",
+        "price": 50000,
+        "quantity": 1,
+        "subtotal": 50000
+      },
+      {
+        "movieId": 6,
+        "title": "Fast X",
+        "price": 50000,
+        "quantity": 1,
+        "subtotal": 50000
+      }
+    ],
+    "total": 100000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-18T18:50:14.707Z"
+  }
+]

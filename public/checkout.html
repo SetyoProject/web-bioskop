@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Checkout</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<nav>
+
+    <div class="logo">
+        CinemaKu
+    </div>
+
+</nav>
+
+
+<div class="checkout-container">
+
+    <div class="cart-box">
+
+        <h2>
+            Daftar Pesanan
+        </h2>
+
+        <div id="cartItems">
+
+        </div>
+
+        <h3>
+
+            Total :
+
+            <span id="cartTotal">
+                Rp0
+            </span>
+
+        </h3>
+
+    </div>
+
+
+    <div class="form-box">
+
+        <h2>
+            Informasi Pemesan
+        </h2>
+
+        <form id="checkoutForm">
+
+            <input
+                type="text"
+                name="customerName"
+                placeholder="Nama Lengkap"
+                required
+            >
+
+            <input
+                type="text"
+                name="phoneNumber"
+                placeholder="Nomor HP"
+                required
+            >
+
+            <select
+                name="paymentMethod"
+                required
+            >
+
+                <option value="">
+                    Pilih Pembayaran
+                </option>
+
+                <option>
+                    Transfer Bank
+                </option>
+
+                <option>
+                    QRIS
+                </option>
+
+                <option>
+                    E-Wallet
+                </option>
+
+            </select>
+
+            <button type="submit">
+
+                Pesan Tiket
+
+            </button>
+
+        </form>
+
+        <div id="checkoutMessage">
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

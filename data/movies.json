@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "title": "Avengers Endgame",
+    "genre": "Action",
+    "duration": 180,
+    "schedule": "19:00",
+    "price": 50000,
+    "availableSeats": 96,
+    "poster": "https://picsum.photos/300/450",
+    "createdAt": "2026-06-19"
+  },
+  {
+    "id": 2,
+    "title": "Spider-Man No Way Home",
+    "genre": "Action",
+    "duration": 148,
+    "schedule": "14:00",
+    "price": 45000,
+    "availableSeats": 120,
+    "poster": "https://picsum.photos/300/451",
+    "createdAt": "2026-06-19"
+  },
+  {
+    "id": 3,
+    "title": "The Conjuring",
+    "genre": "Horror",
+    "duration": 112,
+    "schedule": "21:00",
+    "price": 40000,
+    "availableSeats": 80,
+    "poster": "https://picsum.photos/300/452",
+    "createdAt": "2026-06-19"
+  },
+  {
+    "id": 4,
+    "title": "Frozen II",
+    "genre": "Animation",
+    "duration": 103,
+    "schedule": "10:00",
+    "price": 35000,
+    "availableSeats": 150,
+    "poster": "https://picsum.photos/300/453",
+    "createdAt": "2026-06-19"
+  },
+  {
+    "id": 5,
+    "title": "Interstellar",
+    "genre": "Sci-Fi",
+    "duration": 169,
+    "schedule": "16:30",
+    "price": 55000,
+    "availableSeats": 65,
+    "poster": "https://picsum.photos/300/454",
+    "createdAt": "2026-06-19"
+  },
+  {
+    "id": 6,
+    "title": "Fast X",
+    "genre": "Action",
+    "duration": 141,
+    "schedule": "20:30",
+    "price": 50000,
+    "availableSeats": 109,
+    "poster": "https://picsum.photos/300/455",
+    "createdAt": "2026-06-19"
+  }
+]
