@@ -909,11 +909,11 @@ app.get('/panel-admin/customer', requireAdmin, (req, res) => {
 });
 
 // Default halaman
-app.use((req, res) => {
-    res.sendFile(
-        path.join(publicPath, 'index.html')
-    );
-});
+// app.use((req, res) => {
+//     res.sendFile(
+//         path.join(publicPath, 'index.html')
+//     );
+// });
 
 app.get("/", (req, res) => {
     res.send("API Bioskop Berjalan");
