@@ -1,46 +1,221 @@
 [
   {
-    "id": "BK-20260618-4789",
-    "customerName": "Muhammad Tri Setyo Utomo",
-    "phoneNumber": "0895338079006",
+    "id": "BK-20260619-6028",
+    "customerName": "erwin",
+    "phoneNumber": "65432",
+    "paymentMethod": "QRIS",
+    "items": [
+      {
+        "movieId": 2,
+        "title": "Spider-Man No Way Home",
+        "price": 45000,
+        "quantity": 2,
+        "subtotal": 90000
+      }
+    ],
+    "total": 90000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T13:59:29.685Z"
+  },
+  {
+    "id": "BK-20260619-4768",
+    "customerName": "adit",
+    "phoneNumber": "65432",
     "paymentMethod": "Transfer Bank",
     "items": [
       {
-        "movieId": 1,
-        "title": "Avengers Endgame",
-        "price": 50000,
-        "quantity": 3,
-        "subtotal": 150000
+        "movieId": 2,
+        "title": "Spider-Man No Way Home",
+        "price": 45000,
+        "quantity": 2,
+        "subtotal": 90000
       }
     ],
-    "total": 150000,
-    "status": "Diproses",
-    "createdAt": "2026-06-18T18:15:35.054Z",
-    "updatedAt": "2026-06-18T18:31:47.705Z"
+    "total": 90000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T15:13:51.325Z"
   },
   {
-    "id": "BK-20260618-7523",
-    "customerName": "adittt0",
-    "phoneNumber": "0987654",
+    "id": "BK-20260619-1982",
+    "customerName": "dfg",
+    "phoneNumber": "65432",
     "paymentMethod": "QRIS",
     "items": [
       {
         "movieId": 1,
         "title": "Avengers Endgame",
         "price": 50000,
-        "quantity": 1,
-        "subtotal": 50000
-      },
+        "quantity": 2,
+        "subtotal": 100000
+      }
+    ],
+    "total": 100000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T15:14:29.874Z"
+  },
+  {
+    "id": "BK-20260619-4679",
+    "customerName": "sdfghj",
+    "phoneNumber": "7654",
+    "paymentMethod": "Transfer Bank",
+    "items": [
       {
-        "movieId": 6,
-        "title": "Fast X",
+        "movieId": 1,
+        "title": "Avengers Endgame",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          1,
+          2
+        ],
+        "price": 50000,
+        "quantity": 2,
+        "subtotal": 100000
+      }
+    ],
+    "total": 100000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T15:35:53.509Z"
+  },
+  {
+    "id": "BK-20260619-1382",
+    "customerName": "sopan",
+    "phoneNumber": "4524542",
+    "paymentMethod": "QRIS",
+    "items": [
+      {
+        "movieId": 1,
+        "title": "Avengers Endgame",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          1,
+          2
+        ],
+        "price": 50000,
+        "quantity": 2,
+        "subtotal": 100000
+      }
+    ],
+    "total": 100000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T15:42:15.625Z"
+  },
+  {
+    "id": "BK-20260619-1318",
+    "customerName": "ewffne",
+    "phoneNumber": "544444",
+    "paymentMethod": "Transfer Bank",
+    "items": [
+      {
+        "movieId": 1,
+        "title": "Avengers Endgame",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          3
+        ],
         "price": 50000,
         "quantity": 1,
         "subtotal": 50000
       }
     ],
+    "total": 50000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T16:07:07.378Z"
+  },
+  {
+    "id": "BK-20260619-5735",
+    "customerName": "sowan",
+    "phoneNumber": "0987654",
+    "paymentMethod": "E-Wallet",
+    "items": [
+      {
+        "movieId": 1,
+        "title": "Avengers Endgame",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          4,
+          5
+        ],
+        "price": 50000,
+        "quantity": 2,
+        "subtotal": 100000
+      }
+    ],
     "total": 100000,
     "status": "Menunggu konfirmasi admin",
-    "createdAt": "2026-06-18T18:50:14.707Z"
+    "createdAt": "2026-06-19T16:22:49.507Z"
+  },
+  {
+    "id": "BK-20260619-8646",
+    "customerName": "adit",
+    "phoneNumber": "64525",
+    "paymentMethod": "QRIS",
+    "items": [
+      {
+        "movieId": 2,
+        "title": "Spider-Man No Way Home",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          2
+        ],
+        "price": 45000,
+        "quantity": 1,
+        "subtotal": 45000
+      }
+    ],
+    "total": 45000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T16:30:39.892Z"
+  },
+  {
+    "id": "BK-20260619-4375",
+    "customerName": "sonip",
+    "phoneNumber": "09876",
+    "paymentMethod": "Transfer Bank",
+    "items": [
+      {
+        "movieId": 2,
+        "title": "Spider-Man No Way Home",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          1
+        ],
+        "price": 45000,
+        "quantity": 1,
+        "subtotal": 45000
+      }
+    ],
+    "total": 45000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T16:31:41.640Z"
+  },
+  {
+    "id": "BK-20260619-3502",
+    "customerName": "erwin",
+    "phoneNumber": "9876543",
+    "paymentMethod": "QRIS",
+    "items": [
+      {
+        "movieId": 1,
+        "title": "Avengers Endgame",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          6,
+          7
+        ],
+        "price": 50000,
+        "quantity": 2,
+        "subtotal": 100000
+      }
+    ],
+    "total": 100000,
+    "status": "Menunggu konfirmasi admin",
+    "createdAt": "2026-06-19T17:25:46.587Z"
   }
 ]

@@ -21,6 +21,8 @@ let cart =
         localStorage.getItem('bioskop-cart')
     ) || [];
 
+let selectedMovie = null;
+
 
 function rupiah(value) {
 
@@ -149,10 +151,10 @@ function renderMovies() {
             </p>
 
             <button
-                onclick="addToCart(${movie.id})"
-            >
-                Pesan Tiket
-            </button>
+    onclick="openBooking(${movie.id})"
+>
+    Pesan Tiket
+</button>
 
         </article>
 
@@ -161,106 +163,75 @@ function renderMovies() {
 }
 
 
-function addToCart(movieId) {
+async function addToCart() {
+    const selectedSeats =
+        [...document.querySelectorAll('.seat.selected')]
+            .map(seat => Number(seat.dataset.seat));
 
-    const movie =
-        movies.find(
-            item =>
-                item.id === movieId
-        );
+    if (selectedSeats.length === 0) {
+        alert('Pilih kursi terlebih dahulu.');
+        return;
+    }
 
-    if (!movie) return;
+    const studio =
+        document.getElementById('studioSelect').value;
+
+    const schedule =
+        document.getElementById('scheduleSelect').value;
 
     const existing =
-        cart.find(
-            item =>
-                item.movieId === movieId
+        cart.find(item =>
+            item.movieId === selectedMovie.id &&
+            item.studio === studio &&
+            item.schedule === schedule
         );
 
     if (existing) {
 
-        if (
-            existing.quantity >=
-            movie.availableSeats
-        ) {
+        existing.seats = Array.from(
+            new Set([
+                ...existing.seats,
+                ...selectedSeats
+            ])
+        );
 
-            alert(
-                'Jumlah tiket melebihi kursi tersedia'
-            );
+        existing.quantity =
+            existing.seats.length;
 
-            return;
-
-        }
-
-        existing.quantity++;
+        existing.subtotal =
+            existing.quantity *
+            existing.price;
 
     } else {
 
         cart.push({
-
-            movieId:
-                movie.id,
-
-            title:
-                movie.title,
-
-            price:
-                movie.price,
-
-            quantity:
-                1
-
+            movieId: selectedMovie.id,
+            title: selectedMovie.title,
+            studio,
+            schedule,
+            seats: selectedSeats,
+            quantity: selectedSeats.length,
+            price: selectedMovie.price,
+            subtotal:
+                selectedMovie.price *
+                selectedSeats.length
         });
 
     }
 
     saveCart();
-
     renderCart();
+    await loadBookedSeats();
+    renderSeats();
 
+    document
+        .getElementById(
+            'bookingModal'
+        )
+        .style.display =
+        'none';
 }
 
-
-function updateQuantity(
-    movieId,
-    action
-) {
-
-    const item =
-        cart.find(
-            cartItem =>
-                cartItem.movieId === movieId
-        );
-
-    if (!item) return;
-
-    if (action === 'plus') {
-
-        item.quantity++;
-
-    }
-
-    if (action === 'minus') {
-
-        item.quantity--;
-
-    }
-
-    if (item.quantity < 1) {
-
-        cart =
-            cart.filter(
-                cartItem =>
-                    cartItem.movieId !== movieId
-            );
-
-    }
-
-    saveCart();
-
-    renderCart();
-
-}
 
 
 function removeFromCart(movieId) {
@@ -304,58 +275,62 @@ function renderCart() {
     }
 
     cartItems.innerHTML =
-        cart.map(item => `
+    cart.map(item => `
 
-        <div class="cart-item">
+    <div class="cart-item">
+
+        <div>
 
             <strong>
                 ${item.title}
             </strong>
 
             <p>
-                ${rupiah(item.price)}
+                Studio :
+                ${item.studio}
             </p>
 
-            <button
-                onclick="
-                updateQuantity(
-                ${item.movieId},
-                'minus'
-                )">
-                -
-            </button>
+            <p>
+                Jam :
+                ${item.schedule}
+            </p>
 
-            ${item.quantity}
+            <p>
+                Kursi :
+                ${item.seats.join(', ')}
+            </p>
 
-            <button
-                onclick="
-                updateQuantity(
-                ${item.movieId},
-                'plus'
-                )">
-                +
-            </button>
-
-            <button
-                onclick="
-                removeFromCart(
-                ${item.movieId}
-                )">
-                x
-            </button>
+            <p>
+                ${item.quantity} tiket
+            </p>
 
         </div>
 
-    `).join('');
+        <div>
+            ${rupiah(item.subtotal)}
+        </div>
+
+        <button
+            onclick="
+                removeFromCart(
+                    ${item.movieId}
+                )
+            "
+        >
+            Hapus
+        </button>
+
+    </div>
+
+`).join('');
 
     const total =
-        cart.reduce(
-            (sum, item) =>
-                sum +
-                item.price *
-                item.quantity,
-            0
-        );
+    cart.reduce(
+        (sum, item) =>
+            sum +
+            item.subtotal,
+        0
+    );
 
     cartTotal.textContent =
         rupiah(total);
@@ -399,17 +374,17 @@ async function submitCheckout(
             formData.get(
                 'paymentMethod'
             ),
-
-        items:
-            cart.map(item => ({
-
-                movieId:
-                    item.movieId,
-
-                quantity:
-                    item.quantity
-
-            }))
+    items:
+        cart.map(item => ({
+            movieId: item.movieId,
+            title: item.title,
+            studio: item.studio,
+            schedule: item.schedule,
+            seats: item.seats,
+            quantity: item.quantity,
+            price: item.price,
+            subtotal: item.subtotal
+        }))
 
     };
 
@@ -451,6 +426,9 @@ async function submitCheckout(
         ${result.booking.id}
         </strong>`;
 
+        window.location.href =
+        `/ticket/${result.booking.id}`;
+
     cart = [];
 
     saveCart();
@@ -471,6 +449,389 @@ checkoutForm?.addEventListener(
     'submit',
     submitCheckout
 );
+
+fetch('/api/movies')
+  .then(response => response.json())
+  .then(movies => {
+    const movieContainer =
+      document.getElementById('movieContainer');
+
+    movies.forEach(movie => {
+      movieContainer.innerHTML += `
+        <div class="movie-card">
+          <img src="${movie.poster}" alt="${movie.title}">
+
+          <div class="movie-info">
+            <h3>${movie.title}</h3>
+            <p>🎬 ${movie.genre}</p>
+            <p>⏱️ ${movie.duration} menit</p>
+            <p>🕖 ${movie.schedule}</p>
+            <p>💺 ${movie.availableSeats} kursi tersedia</p>
+            <p>💰 Rp${movie.price.toLocaleString('id-ID')}</p>
+          </div>
+
+          <button onclick="openBooking(${movie.id})">
+    Pesan Tiket
+</button>
+        </div>
+      `;
+    });
+  })
+  .catch(error => {
+    console.error('Gagal mengambil data film:', error);
+  });
+
+  //untuk membuat modal booking
+  async function openBooking(movieId) {
+
+    selectedMovie =
+        movies.find(
+            movie =>
+                movie.id === movieId
+        );
+
+    const studioSelect =
+        document.getElementById(
+            'studioSelect'
+        );
+
+    const scheduleSelect =
+        document.getElementById(
+            'scheduleSelect'
+        );
+
+    studioSelect.onchange =
+        async () => {
+
+            await loadBookedSeats();
+
+            renderSeats();
+
+        };
+
+    scheduleSelect.onchange =
+        async () => {
+
+            await loadBookedSeats();
+
+            renderSeats();
+
+        };
+
+    await loadBookedSeats();
+
+    renderSeats();
+
+    document
+        .getElementById(
+            'bookingModal'
+        )
+        .style.display =
+        'flex';
+}
+
+let bookedSeats = [];
+
+async function loadBookedSeats() {
+
+    const response =
+        await fetch('/api/bookings');
+
+    const bookings =
+        await response.json();
+
+    const studio =
+        document.getElementById(
+            'studioSelect'
+        ).value;
+
+    const schedule =
+        document.getElementById(
+            'scheduleSelect'
+        ).value;
+
+    bookedSeats = [];
+
+    bookings.forEach(booking => {
+
+        booking.items.forEach(item => {
+
+            if (
+                item.movieId === selectedMovie.id &&
+                item.studio === studio &&
+                item.schedule === schedule
+            ) {
+
+                bookedSeats.push(
+                    ...(item.seats || [])
+                );
+
+            }
+
+        });
+
+    });
+
+    console.log(
+        studio,
+        schedule,
+        bookedSeats
+    );
+}
+
+function renderSeats() {
+
+    const seatContainer =
+        document.getElementById(
+            'seatContainer'
+        );
+
+    seatContainer.innerHTML = '';
+
+    for (let i = 1; i <= 20; i++) {
+
+        const seat =
+            document.createElement('div');
+
+        seat.classList.add('seat');
+        seat.dataset.seat = i;
+        seat.textContent = i;
+
+        if (
+            bookedSeats.includes(i)
+        ) {
+
+            seat.classList.add('booked');
+
+        } else {
+
+            seat.addEventListener(
+                'click',
+                () => {
+
+                    seat.classList.toggle(
+                        'selected'
+                    );
+
+                }
+            );
+
+        }
+
+        seatContainer.appendChild(
+            seat
+        );
+
+    }
+
+}
+
+async function loadBookedSeats() {
+
+    const response =
+        await fetch('/api/bookings');
+
+    const bookings =
+        await response.json();
+
+    const studio =
+        document.getElementById(
+            'studioSelect'
+        ).value;
+
+    const schedule =
+        document.getElementById(
+            'scheduleSelect'
+        ).value;
+
+    bookedSeats =
+        bookings
+            .flatMap(
+                booking =>
+                    booking.items
+            )
+            .filter(
+                item =>
+                    item.movieId ===
+                        selectedMovie.id &&
+                    item.studio ===
+                        studio &&
+                    item.schedule ===
+                        schedule
+            )
+            .flatMap(
+                item =>
+                    item.seats || []
+            );
+}
+
+document
+    .querySelector('.close')
+    ?.addEventListener(
+        'click',
+        () => {
+
+            document
+                .getElementById(
+                    'bookingModal'
+                )
+                .style.display =
+                'none';
+
+        }
+    );
+
+    document
+    .getElementById('confirmSeat')
+    ?.addEventListener(
+        'click',
+        addToCart
+    );
+
+    window.onclick = (event) => {
+
+    const modal =
+        document.getElementById(
+            'bookingModal'
+        );
+
+    if (event.target === modal) {
+
+        modal.style.display =
+            'none';
+
+    }
+
+};
+//cetak struk
+async function loadTicket() {
+
+    if (
+        !window.location.pathname
+            .startsWith('/ticket/')
+    ) {
+
+        return;
+
+    }
+
+    const bookingId =
+        window.location.pathname
+            .split('/')
+            .pop();
+
+    const response =
+        await fetch(
+            '/api/bookings'
+        );
+
+    const bookings =
+        await response.json();
+
+    const booking =
+        bookings.find(
+            item =>
+                item.id ===
+                bookingId
+        );
+
+    if (!booking) return;
+
+    renderTicket(
+        booking
+    );
+
+}
+
+loadTicket();
+
+function renderTicket(
+    booking
+) {
+
+    const ticket =
+        document.getElementById(
+            'ticketContainer'
+        );
+
+    if (!ticket) return;
+
+    const item =
+        booking.items[0];
+
+    ticket.innerHTML = `
+<div class="ticket">
+
+    <div class="ticket-header">
+        <h1>🎬 CinemaKu</h1>
+        <p>E-Tiket Bioskop</p>
+    </div>
+
+    <div class="ticket-qr">
+        <img
+            src="
+https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${booking.id}
+            "
+        >
+    </div>
+
+    <div class="ticket-detail">
+
+        <div class="ticket-row">
+            <span>Kode Booking</span>
+            <strong>${booking.id}</strong>
+        </div>
+
+        <div class="ticket-row">
+            <span>Nama</span>
+            <strong>${booking.customerName}</strong>
+        </div>
+
+        <div class="ticket-row">
+            <span>Film</span>
+            <strong>${item.title}</strong>
+        </div>
+
+        <div class="ticket-row">
+            <span>Studio</span>
+            <strong>${item.studio}</strong>
+        </div>
+
+        <div class="ticket-row">
+            <span>Jadwal</span>
+            <strong>${item.schedule}</strong>
+        </div>
+
+        <div class="ticket-row">
+            <span>Kursi</span>
+            <strong>${item.seats.join(', ')}</strong>
+        </div>
+
+        <div class="ticket-row total">
+            <span>Total</span>
+            <strong>${rupiah(booking.total)}</strong>
+        </div>
+
+    </div>
+
+    <p class="ticket-note">
+        Tunjukkan tiket ini kepada petugas bioskop
+    </p>
+
+    <div class="ticket-actions">
+        <button
+            class="print-btn"
+            onclick="window.print()"
+        >
+            🖨️ Cetak Tiket
+        </button>
+    </div>
+
+</div>
+`;
+}
+
+
 
 
 fetchMovies();

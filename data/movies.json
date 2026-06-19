@@ -6,7 +6,7 @@
     "duration": 180,
     "schedule": "19:00",
     "price": 50000,
-    "availableSeats": 96,
+    "availableSeats": 86,
     "poster": "https://picsum.photos/300/450",
     "createdAt": "2026-06-19"
   },
@@ -17,7 +17,7 @@
     "duration": 148,
     "schedule": "14:00",
     "price": 45000,
-    "availableSeats": 120,
+    "availableSeats": 116,
     "poster": "https://picsum.photos/300/451",
     "createdAt": "2026-06-19"
   },
@@ -28,7 +28,7 @@
     "duration": 112,
     "schedule": "21:00",
     "price": 40000,
-    "availableSeats": 80,
+    "availableSeats": 79,
     "poster": "https://picsum.photos/300/452",
     "createdAt": "2026-06-19"
   },
@@ -52,17 +52,6 @@
     "price": 55000,
     "availableSeats": 65,
     "poster": "https://picsum.photos/300/454",
-    "createdAt": "2026-06-19"
-  },
-  {
-    "id": 6,
-    "title": "Fast X",
-    "genre": "Action",
-    "duration": 141,
-    "schedule": "20:30",
-    "price": 50000,
-    "availableSeats": 109,
-    "poster": "https://picsum.photos/300/455",
     "createdAt": "2026-06-19"
   }
 ]

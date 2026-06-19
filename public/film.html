@@ -12,16 +12,13 @@
 <body>
 
 <nav>
-
-    <div class="logo">
-        CinemaKu
-    </div>
+    <div class="logo">CinemaKu</div>
 
     <ul>
-
         <li>
             <a href="/">Home</a>
         </li>
+        <li><a href="/film">Film</a></li>
 
         <li>
             <a href="/checkout">
@@ -31,9 +28,7 @@
 
             </a>
         </li>
-
     </ul>
-
 </nav>
 
 
@@ -61,6 +56,41 @@
     </div>
 
 </section>
+
+<div id="bookingModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close">&times;</span>
+
+        <h2>Pilih Tiket</h2>
+
+        <select id="studioSelect">
+            <option>Studio 1</option>
+            <option>Studio 2</option>
+        </select>
+
+        <select id="scheduleSelect">
+            <option>13:00</option>
+            <option>16:00</option>
+            <option>19:00</option>
+        </select>
+<h3>Pilih Kursi</h3>
+
+<div class="screen">
+    LAYAR
+</div>
+
+<div id="seatContainer"></div>
+        <div id="seatContainer"></div>
+
+        <button id="confirmSeat">
+            Tambah ke Keranjang
+        </button>
+
+    </div>
+
+</div>
 
 <script src="app.js"></script>
 

@@ -398,64 +398,62 @@ app.post('/api/bookings', (req, res) => {
 
     const bookingItems = [];
 
-    let total = 0;
-
     for (const item of items) {
 
-        const movie = movies.find(
-            m => m.id === Number(item.movieId)
+    const movie =
+        movies.find(
+            m =>
+                m.id ===
+                Number(
+                    item.movieId
+                )
         );
 
-        const quantity =
-            Number(item.quantity || 1);
+    const quantity =
+        Array.isArray(
+            item.seats
+        )
+            ? item.seats.length
+            : Number(
+                item.quantity || 1
+            );
 
-        if (!movie) {
+    bookingItems.push({
 
-            return res.status(404).json({
-                message:
-                `Film dengan ID ${item.movieId} tidak ditemukan`
-            });
+        movieId:
+            movie.id,
 
-        }
+        title:
+            movie.title,
 
-        if (quantity < 1) {
+        studio:
+            item.studio,
 
-            return res.status(400).json({
-                message:
-                'Jumlah tiket tidak valid'
-            });
+        schedule:
+            item.schedule,
 
-        }
+        seats:
+            item.seats,
 
-        if (movie.availableSeats < quantity) {
+        price:
+            movie.price,
 
-            return res.status(400).json({
-                message:
-                `Kursi tersedia untuk ${movie.title} tidak mencukupi`
-            });
+        quantity,
 
-        }
+        subtotal:
+            movie.price *
+            quantity
 
-        movie.availableSeats -= quantity;
+    });
 
-        total += movie.price * quantity;
-
-        bookingItems.push({
-
-            movieId: movie.id,
-
-            title: movie.title,
-
-            price: movie.price,
-
-            quantity,
-
-            subtotal:
-                movie.price * quantity
-
-        });
-
-    }
+}
+const total =
+    bookingItems.reduce(
+        (sum, item) =>
+            sum +
+            item.subtotal,
+        0
+    );
 
     const newBooking = {
 
@@ -866,6 +864,7 @@ app.delete(
 
 });
 
+
 // Halaman film
 app.get('/film', (req, res) => {
     res.sendFile(
@@ -908,12 +907,37 @@ app.get('/panel-admin/customer', requireAdmin, (req, res) => {
     );
 });
 
+app.get('/api/bookings', (req, res) => {
+
+    const bookings =
+        readJson(bookingsFile);
+
+    res.json(bookings);
+
+});
+
+//tiket
+app.get(
+    '/ticket/:id',
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                publicPath,
+                'ticket.html'
+            )
+        );
+
+    }
+);
+
 // Default halaman
 app.use((req, res) => {
     res.sendFile(
         path.join(publicPath, 'index.html')
     );
 });
+
 
 
 // Menjalankan server
