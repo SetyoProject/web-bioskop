@@ -1033,6 +1033,27 @@ app.get('/panel-admin/customer', requireAdmin, (req, res) => {
     );
 });
 
+
+app.get(
+    '/api/bookings',
+    (req, res) => {
+
+        console.log(
+            'API BOOKINGS DIPANGGIL'
+        );
+        
+        const bookings =
+            readJson(
+                bookingsFile
+            );
+
+        res.json(
+            bookings
+        );
+
+    }
+);
+
 app.get(
     '/api/bookings/:id',
     requireAdmin,
@@ -1066,6 +1087,8 @@ app.get(
 
     }
 );
+
+
 
 app.patch(
     '/api/bookings/:id/checkin',

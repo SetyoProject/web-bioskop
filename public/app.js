@@ -488,37 +488,6 @@ checkoutForm?.addEventListener(
     submitCheckout
 );
 
-fetch('/api/movies')
-  .then(response => response.json())
-  .then(movies => {
-    const movieContainer =
-      document.getElementById('movieContainer');
-
-    movies.forEach(movie => {
-      movieContainer.innerHTML += `
-        <div class="movie-card">
-          <img src="${movie.poster}" alt="${movie.title}">
-
-          <div class="movie-info">
-            <h3>${movie.title}</h3>
-            <p>🎬 ${movie.genre}</p>
-            <p>⏱️ ${movie.duration} menit</p>
-            <p>🕖 ${movie.schedule}</p>
-            <p>💺 ${movie.availableSeats} kursi tersedia</p>
-            <p>💰 Rp${movie.price.toLocaleString('id-ID')}</p>
-          </div>
-
-          <button onclick="openBooking(${movie.id})">
-    Pesan Tiket
-</button>
-        </div>
-      `;
-    });
-  })
-  .catch(error => {
-    console.error('Gagal mengambil data film:', error);
-  });
-
   //untuk membuat modal booking
   async function openBooking(movieId) {
 
@@ -570,52 +539,6 @@ fetch('/api/movies')
 
 let bookedSeats = [];
 
-async function loadBookedSeats() {
-
-    const response =
-        await fetch('/api/bookings');
-
-    const bookings =
-        await response.json();
-
-    const studio =
-        document.getElementById(
-            'studioSelect'
-        ).value;
-
-    const schedule =
-        document.getElementById(
-            'scheduleSelect'
-        ).value;
-
-    bookedSeats = [];
-
-    bookings.forEach(booking => {
-
-        booking.items.forEach(item => {
-
-            if (
-                item.movieId === selectedMovie.id &&
-                item.studio === studio &&
-                item.schedule === schedule
-            ) {
-
-                bookedSeats.push(
-                    ...(item.seats || [])
-                );
-
-            }
-
-        });
-
-    });
-
-    console.log(
-        studio,
-        schedule,
-        bookedSeats
-    );
-}
 
 function renderSeats() {
 
@@ -624,22 +547,46 @@ function renderSeats() {
             'seatContainer'
         );
 
+    if (!seatContainer) {
+
+        console.error(
+            'seatContainer tidak ditemukan'
+        );
+
+        return;
+
+    }
+
     seatContainer.innerHTML = '';
 
-    for (let i = 1; i <= 20; i++) {
+    for (
+        let i = 1;
+        i <= 20;
+        i++
+    ) {
 
         const seat =
-            document.createElement('div');
+            document.createElement(
+                'div'
+            );
 
-        seat.classList.add('seat');
-        seat.dataset.seat = i;
-        seat.textContent = i;
+        seat.classList.add(
+            'seat'
+        );
+
+        seat.dataset.seat =
+            i;
+
+        seat.textContent =
+            i;
 
         if (
             bookedSeats.includes(i)
         ) {
 
-            seat.classList.add('booked');
+            seat.classList.add(
+                'booked'
+            );
 
         } else {
 
@@ -664,8 +611,11 @@ function renderSeats() {
 
 }
 
+
+
 async function loadBookedSeats() {
 
+    
     const response =
         await fetch('/api/bookings');
 
@@ -683,24 +633,26 @@ async function loadBookedSeats() {
         ).value;
 
     bookedSeats =
-        bookings
-            .flatMap(
-                booking =>
-                    booking.items
-            )
-            .filter(
-                item =>
-                    item.movieId ===
-                        selectedMovie.id &&
-                    item.studio ===
-                        studio &&
-                    item.schedule ===
-                        schedule
-            )
-            .flatMap(
-                item =>
-                    item.seats || []
-            );
+        bookedSeats =
+    bookings
+        .flatMap(
+            booking =>
+                booking.items || []
+        )
+        .filter(
+            item =>
+                selectedMovie &&
+                item.movieId ===
+                    selectedMovie.id &&
+                item.studio ===
+                    studio &&
+                item.schedule ===
+                    schedule
+        )
+        .flatMap(
+            item =>
+                item.seats || []
+        );
 }
 
 document
