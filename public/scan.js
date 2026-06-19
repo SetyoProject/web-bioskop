@@ -1,21 +1,30 @@
 console.log('scan.js terbaca');
 console.log(typeof Html5Qrcode);
+
 const ticketResult =
     document.getElementById(
         'ticketResult'
     );
 
-let scanner =
-    null;
+const cameraInfo =
+    document.getElementById(
+        'cameraInfo'
+    );
 
+let scanner = null;
+let cameras = [];
+let currentCamera = 0;
+
+
+// ======================
+// Scan berhasil
+// ======================
 async function onScanSuccess(
     bookingId
 ) {
 
     if (scanner) {
-
         await scanner.pause();
-
     }
 
     try {
@@ -26,41 +35,29 @@ async function onScanSuccess(
             );
 
         if (!response.ok) {
-
             throw new Error();
-
         }
 
         const booking =
             await response.json();
 
-        if (
-            booking.isUsed
-        ) {
+        if (booking.isUsed) {
 
             ticketResult.innerHTML = `
-
-                <h2
-                    class="ticket-used"
-                >
-                    🔴 Tiket
-                    Sudah Digunakan
+                <h2 class="ticket-used">
+                    🔴 Tiket Sudah Digunakan
                 </h2>
 
                 <p>
                     ${booking.id}
                 </p>
-
             `;
 
             return;
         }
 
         ticketResult.innerHTML = `
-
-            <h2
-                class="ticket-valid"
-            >
+            <h2 class="ticket-valid">
                 ✅ Tiket Valid
             </h2>
 
@@ -71,9 +68,7 @@ async function onScanSuccess(
 
             <p>
                 <b>Nama:</b>
-                ${
-                    booking.customerName
-                }
+                ${booking.customerName}
             </p>
 
             <p>
@@ -90,7 +85,9 @@ async function onScanSuccess(
 
             <p>
                 <b>Total:</b>
-                Rp${booking.total}
+                Rp${booking.total.toLocaleString(
+                    'id-ID'
+                )}
             </p>
 
             <button
@@ -103,7 +100,6 @@ async function onScanSuccess(
             >
                 Konfirmasi Masuk
             </button>
-
         `;
 
     }
@@ -111,20 +107,21 @@ async function onScanSuccess(
     catch {
 
         ticketResult.innerHTML = `
-
             <h2
                 class="ticket-notfound"
             >
-                ⚠️ Tiket
-                Tidak Ditemukan
+                ⚠️ Tiket Tidak Ditemukan
             </h2>
-
         `;
 
     }
 
 }
 
+
+// ======================
+// Konfirmasi check in
+// ======================
 async function confirmTicket(
     id
 ) {
@@ -133,8 +130,7 @@ async function confirmTicket(
         await fetch(
             `/api/bookings/${id}/checkin`,
             {
-                method:
-                    'PATCH'
+                method: 'PATCH'
             }
         );
 
@@ -146,18 +142,13 @@ async function confirmTicket(
     );
 
     ticketResult.innerHTML = `
-
-        <h2
-            class="ticket-valid"
-        >
-            ✅ Tiket Berhasil
-            Digunakan
+        <h2 class="ticket-valid">
+            ✅ Tiket Berhasil Digunakan
         </h2>
 
         <p>
             ${id}
         </p>
-
     `;
 
     setTimeout(
@@ -174,27 +165,149 @@ async function confirmTicket(
 
 }
 
-window.addEventListener(
-    'load',
-    async () => {
 
-        console.log('halaman scan dimulai');
+// ======================
+// Membuka kamera
+// ======================
+async function startScanner() {
 
-        try {
+    try {
 
-            const cameras =
-                await Html5Qrcode
-                    .getCameras();
+        cameras =
+            await Html5Qrcode
+                .getCameras();
 
-            console.log(cameras);
+        console.log(
+            cameras
+        );
+
+        if (
+            !cameras.length
+        ) {
+
+            ticketResult.innerHTML =
+                'Kamera tidak ditemukan';
+
+            return;
 
         }
 
-        catch (error) {
+        scanner =
+            new Html5Qrcode(
+                'reader'
+            );
 
-            console.error(error);
+        await scanner.start(
+
+            cameras[currentCamera].id,
+
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            },
+
+            onScanSuccess
+
+        );
+
+        if (cameraInfo) {
+
+            cameraInfo.textContent =
+                `Menggunakan: ${
+                    cameras[currentCamera]
+                        .label ||
+                    `Kamera ${
+                        currentCamera + 1
+                    }`
+                }`;
 
         }
 
     }
+
+    catch (error) {
+
+        console.error(error);
+
+        ticketResult.innerHTML =
+            'Gagal membuka kamera';
+
+    }
+
+}
+
+
+// ======================
+// Ganti kamera
+// ======================
+async function switchCamera() {
+
+    if (
+        cameras.length < 2
+    ) {
+
+        alert(
+            'Hanya ada satu kamera.'
+        );
+
+        return;
+
+    }
+
+    await scanner.stop();
+
+    currentCamera =
+        (currentCamera + 1) %
+        cameras.length;
+
+    await scanner.start(
+
+        cameras[currentCamera].id,
+
+        {
+            fps: 10,
+            qrbox: {
+                width: 250,
+                height: 250
+            }
+        },
+
+        onScanSuccess
+
+    );
+
+    if (cameraInfo) {
+
+        cameraInfo.textContent =
+            `Menggunakan: ${
+                cameras[currentCamera]
+                    .label ||
+                `Kamera ${
+                    currentCamera + 1
+                }`
+            }`;
+
+    }
+
+}
+
+
+// ======================
+// Load halaman
+// ======================
+window.addEventListener(
+    'load',
+    startScanner
 );
+
+document
+    .getElementById(
+        'switchCamera'
+    )
+    ?.addEventListener(
+        'click',
+        switchCamera
+    );

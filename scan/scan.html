@@ -21,90 +21,107 @@
 
     <script
         defer
-        src="/scan.js"
-    ></script>
+        src="/scan.js"></script>
 
 </head>
 <body>
+<button class="menu-toggle"> ☰</button>
 
 <div class="wrapper">
 
     <!-- Sidebar -->
-    <aside class="sidebar">
-
+    <aside
+        class="sidebar">
         <div class="logo">
             🎬 CinemaKu
         </div>
-
         <nav>
-
-            <a href="/panel-admin">
+            <a href="/panel-admin" class="active">
                 📊 Dashboard
             </a>
 
-            <a href="/panel-admin/transaksi">
+            <a
+                href="/panel-admin/transaksi"
+            >
                 🎟️ Transaksi
             </a>
 
-            <a href="/panel-admin/customer">
+            <a
+                href="/panel-admin/customer"
+            >
                 👤 Pelanggan
             </a>
 
             <a
                 href="/panel-admin/scan"
-                class="active"
             >
                 📷 Scan Tiket
             </a>
 
         </nav>
 
+        <button
+            id="logoutButton"
+        >
+            🚪 Logout
+        </button>
+
     </aside>
 
     <!-- Main -->
     <main class="main-content">
 
-        <header class="topbar">
+    <header class="topbar">
 
-            <div>
+        <div>
+            <h1>Scan Tiket</h1>
+            <p>Validasi tiket pelanggan</p>
+        </div>
 
-                <h1>
-                    Scan Tiket
-                </h1>
+    </header>
 
-                <p>
-                    Validasi tiket pelanggan
-                </p>
+    <!-- Preview Kamera -->
+    <section class="box">
 
-            </div>
-
-        </header>
-
-        <section class="box">
-
-            <div
-                id="reader"
-                class="scanner"
-            ></div>
-
-        </section>
-
-        <section class="box">
+        <div class="scanner-header">
 
             <h2>
-                Hasil Scan
+                Kamera Scanner
             </h2>
 
-            <div id="ticketResult">
+            <button id="switchCamera">
+                🔄 Ganti Kamera
+            </button>
 
-                Arahkan QR tiket
-                ke kamera.
+        </div>
 
-            </div>
+        <div
+            id="reader"
+            class="scanner"
+        ></div>
 
-        </section>
+        <p id="cameraInfo">
+            Membuka kamera...
+        </p>
 
-    </main>
+    </section>
+
+    <!-- Hasil Scan -->
+    <section class="box">
+
+        <h2>
+            Hasil Scan
+        </h2>
+
+        <div id="ticketResult">
+
+            Arahkan QR tiket ke kamera.
+
+        </div>
+
+    </section>
+
+</main>
 
 </div>
 
