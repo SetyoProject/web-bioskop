@@ -47,11 +47,26 @@
     "id": 5,
     "title": "Interstellar",
     "genre": "Sci-Fi",
-    "duration": 169,
+    "duration": "169",
     "schedule": "16:30",
-    "price": 55000,
-    "availableSeats": 65,
-    "poster": "https://picsum.photos/300/454",
-    "createdAt": "2026-06-19"
+    "price": "55000",
+    "availableSeats": "65",
+    "poster": "/uploads/1781904661173.jpg",
+    "createdAt": "2026-06-19",
+    "updatedAt": "2026-06-19T21:31:01.198Z"
+  },
+  {
+    "id": 6,
+    "title": "zcey",
+    "genre": "asc",
+    "duration": "12",
+    "schedule": "12.11",
+    "price": "1212112",
+    "availableSeats": "12",
+    "label": "",
+    "description": "",
+    "poster": "/uploads/1781904335905.jpg",
+    "createdAt": "2026-06-19T20:59:30.818Z",
+    "updatedAt": "2026-06-19T21:25:35.908Z"
   }
 ]

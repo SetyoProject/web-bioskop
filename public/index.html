@@ -2,51 +2,102 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>CinemaKu</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 <body>
 
 <nav>
-    <div class="logo">CinemaKu</div>
+
+    <div class="logo">
+        🎬 CinemaKu
+    </div>
 
     <ul>
+
         <li>
-            <a href="/">Home</a>
+            <a href="/">
+                Home
+            </a>
         </li>
-        <li><a href="/film">Film</a></li>
+
+        <li>
+            <a href="/film">
+                Film
+            </a>
+        </li>
 
         <li>
             <a href="/checkout">
 
                 Keranjang
-                <span id="cartBadge">0</span>
+
+                <span id="cartBadge">
+                    0
+                </span>
 
             </a>
         </li>
+
     </ul>
+
 </nav>
+
 
 <section class="hero">
 
     <div class="overlay">
 
-        <h1>Feel the movies beyond</h1>
+        <h1>
+            Feel the Movies Beyond
+        </h1>
+
+        <p>
+            Nikmati pengalaman menonton
+            terbaik bersama CinemaKu
+        </p>
 
         <div class="search-box">
+
             <input
                 type="text"
                 id="searchFilm"
-                placeholder="Cari film..."
+                placeholder="Cari film favoritmu..."
             >
+
         </div>
 
-        <div class="banner-container">
+        <!-- Slider Banner -->
 
-            <img src="uploads/banner1.jpg">
-            <img src="uploads/banner2.jpg">
-            <img src="uploads/banner3.jpg">
+        <div class="slider">
+
+            <div class="slides">
+
+                <img
+                    src="uploads/banner1.jpg"
+                    alt="Banner 1"
+                >
+
+                <img
+                    src="uploads/banner2.jpg"
+                    alt="Banner 2"
+                >
+
+                <img
+                    src="uploads/banner3.jpg"
+                    alt="Banner 3"
+                >
+
+            </div>
 
         </div>
 
@@ -54,23 +105,54 @@
 
 </section>
 
+
 <section class="now-playing">
 
     <div class="section-title">
-        <h2>Now Playing</h2>
+
+        <h2>
+            🎬 Now Playing
+        </h2>
 
         <a href="/film">
-            <button>Lihat Semua</button>
+
+            <button>
+                Lihat Semua
+            </button>
+
         </a>
+
     </div>
 
-    <div class="movie-container" id="movieContainer">
+    <div
+        class="movie-container"
+        id="movieContainer"
+    >
 
         <!-- Diisi dari movies.json -->
 
     </div>
 
 </section>
+
+
+<footer>
+
+    <h2>
+        🎬 CinemaKu
+    </h2>
+
+    <p>
+        Pesan tiket bioskop dengan mudah,
+        cepat, dan praktis.
+    </p>
+
+    <p>
+        © 2026 CinemaKu.
+        All Rights Reserved.
+    </p>
+
+</footer>
 
 <script src="app.js"></script>
 

@@ -3,6 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +14,38 @@ const bookingsFile = path.join(dataPath, 'bookings.json');
 
 const publicPath = path.join(__dirname, 'public');
 const uploadsPath = path.join(publicPath, 'uploads');
+
+const storage =
+    multer.diskStorage({
+
+        destination:
+            (req,file,
+                cb
+            ) => {
+                cb(
+                    null,
+                    uploadsPath
+                );
+            },
+        filename:
+            (req,file,
+                cb
+            ) => {
+                const ext =
+                    path.extname(
+                        file.originalname
+                    );
+                cb(
+                    null,
+                    Date.now() + ext
+                );
+            }
+    });
+
+const upload =
+    multer({
+        storage
+    });
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
@@ -579,11 +612,63 @@ app.get(
     requireAdmin,
     (req, res) => {
 
-        res.json(
-            buildAdminSummary()
-        );
+        const movies =
+            readJson(
+                moviesFile
+            );
 
-});
+        const bookings =
+            readJson(
+                bookingsFile
+            );
+
+        const bookingCount =
+            bookings.length;
+
+        const totalRevenue =
+            bookings.reduce(
+                (sum, booking) =>
+                    sum +
+                    Number(
+                        booking.total || 0
+                    ),
+                0
+            );
+
+        const ticketCount =
+            bookings.reduce(
+                (sum, booking) =>
+
+                    sum +
+
+                    booking.items.reduce(
+                        (s, item) =>
+                            s +
+                            Number(
+                                item.quantity || 0
+                            ),
+                        0
+                    ),
+
+                0
+            );
+
+        res.json({
+
+            movieCount:
+                movies.length,
+
+            bookingCount,
+
+            ticketCount,
+
+            totalRevenue
+
+        });
+
+    }
+);
+
 
 //data pelanggan
 app.get(
@@ -642,7 +727,11 @@ app.get(
 app.post(
     '/api/admin/movies',
     requireAdmin,
+    upload.single('poster'),
     (req, res) => {
+
+        console.log(req.body);
+console.log(req.file);
 
         const {
 
@@ -708,16 +797,19 @@ app.post(
                 Number(availableSeats),
 
             label:
-                String(label || '').trim(),
+                String(
+                    label || ''
+                ).trim(),
 
             description:
-                String(description || '').trim(),
+                String(
+                    description || ''
+                ).trim(),
 
             poster:
-                String(
-                    poster ||
-                    '/img/default-poster.jpg'
-                ),
+                req.file
+                    ? `/uploads/${req.file.filename}`
+                    : '/img/default-poster.jpg',
 
             createdAt:
                 new Date().toISOString(),
@@ -752,6 +844,7 @@ app.post(
 app.patch(
     '/api/admin/movies/:id',
     requireAdmin,
+    upload.single('poster'),
     (req, res) => {
 
         const movies =
@@ -784,40 +877,72 @@ app.patch(
             'price',
             'availableSeats',
             'label',
-            'description',
-            'poster'
+            'description'
 
         ];
 
         for (const field of allowedFields) {
 
-            if (
-                req.body[field] !== undefined
-            ) {
+    if (
+        req.body[field] !== undefined
+    ) {
 
-                movie[field] =
-                    req.body[field];
+        movie[field] =
+            req.body[field];
 
-            }
+    }
+
+}
+
+if (req.file) {
+
+    if (
+        movie.poster &&
+        movie.poster.startsWith('/uploads/')
+    ) {
+
+        const oldPath =
+            path.join(
+                publicPath,
+                movie.poster.replace(
+                    '/uploads/',
+                    'uploads/'
+                )
+            );
+
+        if (
+            fs.existsSync(oldPath)
+        ) {
+
+            fs.unlinkSync(
+                oldPath
+            );
 
         }
 
-        movie.updatedAt =
-            new Date().toISOString();
+    }
 
-        writeJson(
-            moviesFile,
-            movies
-        );
+    movie.poster =
+        `/uploads/${req.file.filename}`;
 
-        res.json({
+}
 
-            message:
-                'Film berhasil diperbarui',
+movie.updatedAt =
+    new Date().toISOString();
 
-            movie
+writeJson(
+    moviesFile,
+    movies
+);
 
-        });
+res.json({
+
+    message:
+        'Film berhasil diperbarui',
+
+    movie
+
+});
 
 });
 
@@ -865,6 +990,7 @@ app.delete(
 });
 
 
+
 // Halaman film
 app.get('/film', (req, res) => {
     res.sendFile(
@@ -907,14 +1033,103 @@ app.get('/panel-admin/customer', requireAdmin, (req, res) => {
     );
 });
 
-app.get('/api/bookings', (req, res) => {
+app.get(
+    '/api/bookings/:id',
+    requireAdmin,
+    (req, res) => {
 
-    const bookings =
-        readJson(bookingsFile);
+        const bookings =
+            readJson(
+                bookingsFile
+            );
 
-    res.json(bookings);
+        const booking =
+            bookings.find(
+                item =>
+                    item.id ===
+                    req.params.id
+            );
 
-});
+        if (!booking) {
+
+            return res.status(404)
+                .json({
+                    message:
+                        'Booking tidak ditemukan'
+                });
+
+        }
+
+        res.json(
+            booking
+        );
+
+    }
+);
+
+app.patch(
+    '/api/bookings/:id/checkin',
+    requireAdmin,
+    (req, res) => {
+
+        const bookings =
+            readJson(
+                bookingsFile
+            );
+
+        const booking =
+            bookings.find(
+                item =>
+                    item.id ===
+                    req.params.id
+            );
+
+        if (!booking) {
+
+            return res.status(404)
+                .json({
+                    message:
+                        'Booking tidak ditemukan'
+                });
+
+        }
+
+        booking.isUsed =
+            true;
+
+        booking.checkInAt =
+            new Date()
+                .toISOString();
+
+        writeJson(
+            bookingsFile,
+            bookings
+        );
+
+        res.json({
+
+            message:
+                'Tiket berhasil divalidasi'
+
+        });
+
+    }
+);
+
+app.get(
+    '/panel-admin/scan',
+    requireAdmin,
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,'scan',
+                'scan.html'
+            )
+        );
+
+    }
+);
 
 //tiket
 app.get(

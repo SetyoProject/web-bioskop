@@ -223,6 +223,11 @@ async function addToCart() {
     renderCart();
     await loadBookedSeats();
     renderSeats();
+    showToast(
+        `🎟️ ${selectedMovie.title}
+     (${selectedSeats.length} tiket)
+     berhasil ditambahkan`
+    );
 
     document
         .getElementById(
@@ -232,19 +237,51 @@ async function addToCart() {
         'none';
 }
 
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            'toast'
+        );
+
+    if (!toast) return;
+
+    toast.innerHTML = `
+        <div class="toast-message">
+            ${message}
+        </div>
+    `;
+
+    setTimeout(() => {
+
+        toast.innerHTML = '';
+
+    }, 5000);
+
+}
 
 
-function removeFromCart(movieId) {
+function removeFromCart(
+    movieId,
+    studio,
+    schedule
+) {
 
     cart =
         cart.filter(
             item =>
-                item.movieId !== movieId
+                !(
+                    item.movieId === movieId &&
+                    item.studio === studio &&
+                    item.schedule === schedule
+                )
         );
 
     saveCart();
 
     renderCart();
+
+    refreshSeats();
 
 }
 
@@ -313,9 +350,10 @@ function renderCart() {
         <button
             onclick="
                 removeFromCart(
-                    ${item.movieId}
-                )
-            "
+                    ${item.movieId},
+                    '${item.studio}',
+                    '${item.schedule}'
+                )"
         >
             Hapus
         </button>

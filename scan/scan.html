@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Scan Tiket</title>
+
+    <link
+        rel="stylesheet"
+        href="/admin.css"
+    >
+
+    <script
+        src="https://unpkg.com/html5-qrcode"
+    ></script>
+
+    <script
+        defer
+        src="/scan.js"
+    ></script>
+
+</head>
+<body>
+
+<div class="wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🎬 CinemaKu
+        </div>
+
+        <nav>
+
+            <a href="/panel-admin">
+                📊 Dashboard
+            </a>
+
+            <a href="/panel-admin/transaksi">
+                🎟️ Transaksi
+            </a>
+
+            <a href="/panel-admin/customer">
+                👤 Pelanggan
+            </a>
+
+            <a
+                href="/panel-admin/scan"
+                class="active"
+            >
+                📷 Scan Tiket
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Scan Tiket
+                </h1>
+
+                <p>
+                    Validasi tiket pelanggan
+                </p>
+
+            </div>
+
+        </header>
+
+        <section class="box">
+
+            <div
+                id="reader"
+                class="scanner"
+            ></div>
+
+        </section>
+
+        <section class="box">
+
+            <h2>
+                Hasil Scan
+            </h2>
+
+            <div id="ticketResult">
+
+                Arahkan QR tiket
+                ke kamera.
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
