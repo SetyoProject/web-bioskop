@@ -1458,7 +1458,7 @@ Terima kasih dan selamat menonton 🍿`;
 
                     message,
 
-                    file: [
+                    url: [
                         pdfUrl
                     ]
                 },
