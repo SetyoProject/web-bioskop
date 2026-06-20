@@ -3,9 +3,7 @@ const transactionTable =
         'transactionTable'
     );
 
-
 function rupiah(value) {
-
     return new Intl.NumberFormat(
         'id-ID',
         {
@@ -14,9 +12,7 @@ function rupiah(value) {
             minimumFractionDigits: 0
         }
     ).format(value);
-
 }
-
 
 async function fetchTransactions() {
 
@@ -28,92 +24,141 @@ async function fetchTransactions() {
     const bookings =
         await response.json();
 
-    renderTransactions(
-        bookings
-    );
-
+    renderTransactions(bookings);
 }
-
 
 function renderTransactions(bookings) {
 
     transactionTable.innerHTML =
-        bookings.map(item => `
+        bookings.map(item => {
 
-        <tr>
+            const paymentStatus =
+                item.paymentStatus || 'pending';
 
-            <td>${item.id}</td>
+            const ticketStatus =
+                item.ticketStatus || '-';
 
-            <td>${item.customerName}</td>
+            const isUsed =
+                item.isUsed || false;
 
-            <td>${rupiah(item.total)}</td>
+            return `
+                <tr>
 
-            <td>${item.status}</td>
+                    <td>${item.id}</td>
 
-            <td>
-                ${new Date(
-                    item.createdAt
-                ).toLocaleDateString()}
-            </td>
+                    <td>${item.customerName}</td>
 
-            <td>
+                    <td>
+                        ${
+                            item.items?.map(
+                                film => film.title
+                            ).join(', ') || '-'
+                        }
+                    </td>
 
+                    <td>
+                        ${rupiah(item.total)}
+                    </td>
+
+                    <td>
+                        ${
+                            paymentStatus === 'pending'
+                                ? 'Pending'
+                                : 'Paid'
+                        }
+                    </td>
+
+                    <td>
+                        ${ticketStatus}
+                    </td>
+
+                    <td>
+                        ${
+                            item.checkInAt
+                                ? new Date(
+                                    item.checkInAt
+                                ).toLocaleString('id-ID')
+                                : '-'
+                        }
+                    </td>
+
+                    <td>
+
+    ${
+        paymentStatus === 'pending'
+            ? `
                 <button
-                    onclick="
-                    updateStatus(
-                    '${item.id}',
-                    'Diproses'
-                    )">
-
-                    Diproses
-
+                    class="btn-confirm"
+                    onclick="confirmPayment('${item.id}')">
+                    Konfirmasi
                 </button>
+            `
+            : !isUsed
+                ? `
+                    <button
+                        class="btn-scan"
+                        onclick="scanTicket('${item.id}')">
+                        Scan Tiket
+                    </button>
+                `
+                : `
+                    <button
+                        class="btn-detail"
+                        onclick="viewTicket('${item.id}')">
+                        Detail
+                    </button>
+                `
+    }
 
-                <button
-                    onclick="
-                    updateStatus(
-                    '${item.id}',
-                    'Selesai'
-                    )">
+</td>
 
-                    Selesai
-
-                </button>
-
-            </td>
-
-        </tr>
-
-    `).join('');
+                </tr>
+            `;
+        }).join('');
 
 }
 
+async function confirmPayment(id) {
 
-async function updateStatus(
-    id,
-    status
+    const response =
+        await fetch(
+            `/api/admin/bookings/${id}/confirm`,
+            {
+                method: 'PATCH'
+            }
+        );
+
+    const result =
+        await response.json();
+
+    if (
+    result.waLink
 ) {
 
-    await fetch(
-        `/api/admin/bookings/${id}/status`,
-        {
-            method: 'PATCH',
-
-            headers: {
-                'Content-Type':
-                'application/json'
-            },
-
-            body:
-                JSON.stringify({
-                    status
-                })
-        }
+    window.open(
+        result.waLink,
+        '_blank'
     );
-
-    fetchTransactions();
 
 }
 
+    fetchTransactions();
+}
+
+function scanTicket(id) {
+
+    window.location.href =
+        `/panel-admin/scan?id=${id}`;
+
+}
+
+function viewTicket(id) {
+
+    window.open(
+        `/uploads/${id}.pdf`,
+        '_blank'
+    );
+
+}
 
 fetchTransactions();

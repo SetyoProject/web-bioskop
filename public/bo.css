@@ -1,0 +1,97 @@
+body {
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #1f2937
+        );
+    padding: 20px;
+}
+
+.success-card {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.15);
+}
+
+.success-icon {
+    font-size: 70px;
+    margin-bottom: 20px;
+    color: #dc2626;
+}
+
+.success-card h1 {
+    color: #111827;
+    margin-bottom: 10px;
+}
+
+.success-text {
+    color: #6b7280;
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+.booking-code-box {
+    background: #fef2f2;
+    border: 2px dashed #dc2626;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.booking-code-box span {
+    display: block;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.booking-code-box h2 {
+    color: #dc2626;
+    font-size: 32px;
+    letter-spacing: 3px;
+    font-weight: 700;
+}
+
+.instruction-box {
+    background: #f9fafb;
+    border-left: 5px solid #f59e0b;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.instruction-box p {
+    margin-bottom: 15px;
+    color: #374151;
+    line-height: 1.8;
+}
+
+.instruction-box p:last-child {
+    margin-bottom: 0;
+}
+
+.home-btn {
+    display: inline-block;
+    background: #dc2626;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px 30px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.home-btn:hover {
+    background: #991b1b;
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 20px
+        rgba(220, 38, 38, 0.3);
+}

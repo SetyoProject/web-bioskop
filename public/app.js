@@ -388,7 +388,6 @@ async function submitCheckout(
         );
 
         return;
-
     }
 
     const formData =
@@ -412,20 +411,36 @@ async function submitCheckout(
             formData.get(
                 'paymentMethod'
             ),
-    items:
-        cart.map(item => ({
-            movieId: item.movieId,
-            title: item.title,
-            studio: item.studio,
-            schedule: item.schedule,
-            seats: item.seats,
-            quantity: item.quantity,
-            price: item.price,
-            subtotal: item.subtotal
-        }))
 
+        items:
+            cart.map(item => ({
+                movieId:
+                    item.movieId,
+
+                title:
+                    item.title,
+
+                studio:
+                    item.studio,
+
+                schedule:
+                    item.schedule,
+
+                seats:
+                    item.seats,
+
+                quantity:
+                    item.quantity,
+
+                price:
+                    item.price,
+
+                subtotal:
+                    item.subtotal
+            }))
     };
 
+    // WAJIB ADA
     const response =
         await fetch(
             '/api/bookings',
@@ -434,7 +449,7 @@ async function submitCheckout(
 
                 headers: {
                     'Content-Type':
-                    'application/json'
+                        'application/json'
                 },
 
                 body:
@@ -447,25 +462,22 @@ async function submitCheckout(
     const result =
         await response.json();
 
+    console.log(result);
+
     if (!response.ok) {
 
         checkoutMessage.textContent =
             result.message;
 
         return;
-
     }
 
     checkoutMessage.innerHTML =
-
         `Booking berhasil.
         Kode Booking:
         <strong>
-        ${result.booking.id}
+            ${result.booking.id}
         </strong>`;
-
-        window.location.href =
-        `/ticket/${result.booking.id}`;
 
     cart = [];
 
@@ -475,6 +487,8 @@ async function submitCheckout(
 
     checkoutForm.reset();
 
+    window.location.href =
+        `/booking-success.html?id=${result.booking.id}`;
 }
 
 

@@ -41,6 +41,7 @@ async function onScanSuccess(
         const booking =
             await response.json();
 
+        // Tiket sudah digunakan
         if (booking.isUsed) {
 
             ticketResult.innerHTML = `
@@ -49,12 +50,47 @@ async function onScanSuccess(
                 </h2>
 
                 <p>
+                    <b>Kode:</b>
                     ${booking.id}
+                </p>
+
+                <p>
+                    <b>Nama:</b>
+                    ${booking.customerName}
                 </p>
             `;
 
             return;
         }
+
+        // Hitung jumlah tiket
+        const totalTicket =
+            booking.items.reduce(
+                (sum, item) =>
+                    sum +
+                    Number(
+                        item.quantity || 0
+                    ),
+                0
+            );
+
+        // Gabungkan nama film
+        const movieNames =
+            booking.items
+                .map(
+                    item =>
+                        item.title
+                )
+                .join(', ');
+
+        // Gabungkan nomor kursi
+        const seats =
+            booking.items
+                .flatMap(
+                    item =>
+                        item.seats || []
+                )
+                .join(', ');
 
         ticketResult.innerHTML = `
             <h2 class="ticket-valid">
@@ -72,15 +108,28 @@ async function onScanSuccess(
             </p>
 
             <p>
-                <b>Film:</b>
+                <b>Status Pembayaran:</b>
                 ${
-                    booking.items
-                        .map(
-                            item =>
-                                item.title
-                        )
-                        .join(', ')
+                    booking.paymentStatus ===
+                    'paid'
+                        ? '🟢 Sudah Dikonfirmasi'
+                        : '🔴 Belum Dikonfirmasi'
                 }
+            </p>
+
+            <p>
+                <b>Film:</b>
+                ${movieNames}
+            </p>
+
+            <p>
+                <b>Jumlah Tiket:</b>
+                ${totalTicket} tiket
+            </p>
+
+            <p>
+                <b>Kursi:</b>
+                ${seats}
             </p>
 
             <p>
@@ -90,21 +139,37 @@ async function onScanSuccess(
                 )}
             </p>
 
-            <button
-                class="checkin-btn"
-                onclick="
-                    confirmTicket(
-                        '${booking.id}'
-                    )
-                "
-            >
-                Konfirmasi Masuk
-            </button>
+            ${
+                booking.paymentStatus ===
+                'paid'
+                    ? `
+                        <button
+                            class="checkin-btn"
+                            onclick="
+                                confirmTicket(
+                                    '${booking.id}'
+                                )
+                            "
+                        >
+                            Konfirmasi Masuk
+                        </button>
+                    `
+                    : `
+                        <button
+                            class="checkin-btn"
+                            disabled
+                        >
+                            Pembayaran Belum Dikonfirmasi
+                        </button>
+                    `
+            }
         `;
 
     }
 
-    catch {
+    catch (error) {
+
+        console.error(error);
 
         ticketResult.innerHTML = `
             <h2
@@ -147,6 +212,7 @@ async function confirmTicket(
         </h2>
 
         <p>
+            <b>Kode:</b>
             ${id}
         </p>
     `;

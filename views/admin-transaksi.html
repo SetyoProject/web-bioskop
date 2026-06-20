@@ -2,43 +2,125 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <title>Data Transaksi</title>
 
     <link rel="stylesheet" href="/admin.css">
-
     <script defer src="/admin-transaksi.js"></script>
 </head>
 <body>
 
-<div class="container">
+<button class="menu-toggle">
+    ☰
+</button>
 
-    <h1>Data Transaksi</h1>
+<div class="wrapper">
 
-    <table>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
 
-        <thead>
+        <div class="logo">
+            🎬 CinemaKu
+        </div>
 
-        <tr>
+        <nav>
 
-            <th>Kode Booking</th>
-            <th>Nama Customer</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Tanggal</th>
-            <th>Aksi</th>
+            <a href="/panel-admin">
+                Dashboard
+            </a>
 
-        </tr>
+            <a
+                href="/panel-admin/transaksi"
+                class="active">
+                Transaksi
+            </a>
 
-        </thead>
+            <a href="/panel-admin/customer">
+                Pelanggan
+            </a>
 
-        <tbody id="transactionTable">
+        </nav>
 
-        </tbody>
+        <button id="logoutButton">
+            Logout
+        </button>
 
-    </table>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h1>Data Transaksi</h1>
+                <p>
+                    Daftar transaksi pemesanan tiket bioskop
+                </p>
+            </div>
+
+        </header>
+
+        <section class="box table-section">
+
+            <h2>Daftar Transaksi</h2>
+
+            <table>
+
+                <thead>
+
+                <tr>
+
+                    <th>Kode Booking</th>
+                    <th>Nama</th>
+                    <th>Film</th>
+                    <th>Total</th>
+                    <th>Status Pembayaran</th>
+                    <th>Status Tiket</th>
+                    <th>Waktu Scan</th>
+                    <th>Aksi</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="transactionTable">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
 
 </div>
+
+<script>
+
+const menuToggle =
+    document.querySelector(
+        '.menu-toggle'
+    );
+
+const sidebar =
+    document.getElementById(
+        'sidebar'
+    );
+
+menuToggle?.addEventListener(
+    'click',
+    () => {
+        sidebar.classList.toggle(
+            'active'
+        );
+    }
+);
+
+</script>
 
 </body>
 </html>

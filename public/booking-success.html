@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bo.css">
+</head>
+<body>
+    <div class="success-card">
+
+    <div class="success-icon">
+        🎬
+    </div>
+
+    <h1>
+        Pemesanan Berhasil!
+    </h1>
+
+    <p class="success-text">
+        Terima kasih telah melakukan pemesanan di
+        <strong>CinemaKu</strong>.
+    </p>
+
+    <div class="booking-code-box">
+
+        <span>Kode Booking Anda</span>
+
+        <h2 id="bookingId">
+        </h2>
+
+    </div>
+
+    <div class="instruction-box">
+
+        <p>
+            📍 Silakan datang ke bioskop dan tunjukkan
+            <strong>kode booking</strong> ini kepada kasir.
+        </p>
+
+        <p>
+            💵 Lakukan pembayaran secara
+            <strong>cash</strong> di kasir.
+        </p>
+
+        <p>
+            📄 Setelah pembayaran dikonfirmasi admin,
+            <strong>E-Ticket PDF beserta QR Code</strong>
+            akan dikirim otomatis ke WhatsApp Anda.
+        </p>
+
+    </div>
+
+    <a
+        href="/"
+        class="home-btn">
+
+        Kembali ke Beranda
+
+    </a>
+
+</div>
+<script>
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const bookingId =
+    params.get('id');
+
+document.getElementById(
+    'bookingId'
+).textContent =
+    bookingId;
+
+</script>
+</body>
+</html>

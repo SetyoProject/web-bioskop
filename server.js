@@ -15,6 +15,15 @@ const bookingsFile = path.join(dataPath, 'bookings.json');
 const publicPath = path.join(__dirname, 'public');
 const uploadsPath = path.join(publicPath, 'uploads');
 
+const PDFDocument =
+    require('pdfkit');
+
+const QRCode =
+    require('qrcode');
+
+const axios =
+    require('axios');
+
 const storage =
     multer.diskStorage({
 
@@ -402,6 +411,117 @@ app.get('/api/summary', (req, res) => {
 
 });
 
+
+// generate pdf
+async function generateTicketPdf(
+    booking
+) {
+
+    const fileName =
+        `${booking.id}.pdf`;
+
+    const filePath =
+        path.join(
+            uploadsPath,
+            fileName
+        );
+
+    const doc =
+        new PDFDocument();
+
+    doc.pipe(
+        fs.createWriteStream(
+            filePath
+        )
+    );
+
+    const qrBuffer =
+        await QRCode.toBuffer(
+            booking.id
+        );
+
+    doc
+        .fontSize(24)
+        .text(
+            'E-Ticket CinemaKu',
+            {
+                align:
+                    'center'
+            }
+        );
+
+    doc.moveDown();
+
+    doc.text(
+        `Kode Booking : ${booking.id}`
+    );
+
+    doc.text(
+        `Nama : ${booking.customerName}`
+    );
+
+    doc.text(
+        `Film : ${
+            booking.items
+                .map(
+                    item =>
+                        item.title
+                )
+                .join(', ')
+        }`
+    );
+
+    doc.text(
+        `Studio : ${
+            booking.items[0]
+                ?.studio
+        }`
+    );
+
+    doc.text(
+        `Jadwal : ${
+            booking.items[0]
+                ?.schedule
+        }`
+    );
+
+    doc.text(
+        `Kursi : ${
+            booking.items
+                .flatMap(
+                    item =>
+                        item.seats
+                )
+                .join(', ')
+        }`
+    );
+
+    doc.text(
+        `Total : Rp${booking.total.toLocaleString(
+            'id-ID'
+        )}`
+    );
+
+    doc.moveDown();
+
+    doc.image(
+        qrBuffer,
+        {
+            fit: [
+                180,
+                180
+            ],
+            align:
+                'center'
+        }
+    );
+
+    doc.end();
+
+    booking.ticketPdf =
+        `/uploads/${fileName}`;
+}
+
 //post booking
 app.post('/api/bookings', (req, res) => {
 
@@ -488,19 +608,24 @@ const total =
         0
     );
 
-    const newBooking = {
+   const newBooking = {
+    id: formatBookingId(),
+    customerName,
+    phoneNumber,
+    paymentMethod,
+    items: bookingItems,
+    total,
 
-        id: formatBookingId(),
-        customerName,
-        phoneNumber,
-        paymentMethod,
-        items: bookingItems,
-        total,
-        status:
-            'Menunggu konfirmasi admin',
-        createdAt:
-            new Date().toISOString()
-    };
+    status: 'Menunggu konfirmasi admin',
+
+    paymentStatus: 'pending',
+    ticketStatus: '-',
+    isUsed: false,
+    scanTime: null,
+    ticketPdf: null,
+
+    createdAt: new Date().toISOString()
+};
 
     bookings.push(newBooking);
 
@@ -592,6 +717,13 @@ app.patch(
 
         booking.updatedAt =
             new Date().toISOString();
+
+
+        booking.paymentStatus =
+    'paid';
+
+booking.ticketStatus =
+    'Belum Digunakan';
 
         writeJson(
             bookingsFile,
@@ -991,6 +1123,7 @@ app.delete(
 
 
 
+
 // Halaman film
 app.get('/film', (req, res) => {
     res.sendFile(
@@ -1153,6 +1286,76 @@ app.get(
 
     }
 );
+app.patch(
+    '/api/admin/bookings/:id/confirm',
+    requireAdmin,
+    async (req, res) => {
+
+        const bookings =
+            readJson(bookingsFile);
+
+        const booking =
+            bookings.find(
+                item =>
+                    item.id ===
+                    req.params.id
+            );
+
+        if (!booking) {
+            return res.status(404).json({
+                message:
+                    'Booking tidak ditemukan'
+            });
+        }
+
+        booking.paymentStatus =
+            'paid';
+
+        booking.ticketStatus =
+            'Belum Digunakan';
+
+        booking.updatedAt =
+            new Date().toISOString();
+
+        await generateTicketPdf(
+            booking
+        );
+
+        const message =
+`🎬 CinemaKu
+
+Pembayaran berhasil dikonfirmasi.
+
+Kode Booking:
+${booking.id}
+
+Film:
+${booking.items
+    .map(item => item.title)
+    .join(', ')}
+
+Silakan download e-ticket:
+http://localhost:3000${booking.ticketPdf}`;
+
+const phone =
+    booking.phoneNumber
+        .replace(/^0/, '62');
+
+const waLink =
+    `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+        writeJson(
+            bookingsFile,
+            bookings
+        );
+
+        res.json({
+            message:
+                'Pembayaran berhasil dikonfirmasi',
+            booking
+        });
+    }
+); 
 
 //tiket
 app.get(
