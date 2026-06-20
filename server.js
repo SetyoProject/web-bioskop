@@ -1422,12 +1422,7 @@ Kode Booking:
 ${booking.id}
 
 Film:
-${booking.items
-    .map(
-        item =>
-            item.title
-    )
-    .join(', ')}
+${booking.items[0].title}
 
 Studio:
 ${booking.items[0].studio}
@@ -1435,9 +1430,12 @@ ${booking.items[0].studio}
 Jadwal:
 ${booking.items[0].schedule}
 
-E-ticket PDF terlampir.
+📄 Download E-Ticket:
+${pdfUrl}
 
-Terima kasih dan selamat menonton 🍿`;
+Tunjukkan QR Code pada tiket kepada petugas bioskop.
+
+Selamat menonton 🍿`;
 
         console.log(
             'Nomor:',
@@ -1449,27 +1447,22 @@ Terima kasih dan selamat menonton 🍿`;
             pdfUrl
         );
 
-        const response =
-            await axios.post(
-                'https://api.fonnte.com/send',
-                {
-                    target:
-                        phone,
+        await axios.post(
+    'https://api.fonnte.com/send',
+    {
+        target:
+            phone,
 
-                    message,
-
-                    url: [
-                        pdfUrl
-                    ]
-                },
-                {
-                    headers: {
-                        Authorization:
-                            process.env
-                                .FONNTE_TOKEN
-                    }
-                }
-            );
+        message
+    },
+    {
+        headers: {
+            Authorization:
+                process.env
+                    .FONNTE_TOKEN
+        }
+    }
+);
 
         console.log(
             'FONNTE:',
