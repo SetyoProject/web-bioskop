@@ -423,12 +423,17 @@ async function generateTicketPdf(
 
     const filePath =
         path.join(
-            uploadsPath,
+            __dirname,
+            'public',
+            'uploads',
             fileName
         );
 
     const doc =
-        new PDFDocument();
+        new PDFDocument({
+            size: 'A5',
+            margin: 30
+        });
 
     doc.pipe(
         fs.createWriteStream(
@@ -436,86 +441,155 @@ async function generateTicketPdf(
         )
     );
 
-    const qrBuffer =
-        await QRCode.toBuffer(
-            booking.id
-        );
+    // Card
+    doc
+        .roundedRect(
+            20,
+            20,
+            380,
+            540,
+            20
+        )
+        .stroke('#dddddd');
 
+    // Header
     doc
         .fontSize(24)
+        .fillColor('#dc2626')
         .text(
-            'E-Ticket CinemaKu',
+            '🎬 CinemaKu',
             {
-                align:
-                    'center'
+                align: 'center'
             }
         );
 
-    doc.moveDown();
+    doc
+        .moveDown(0.3)
+        .fontSize(13)
+        .fillColor('#888')
+        .text(
+            'E-Ticket Bioskop',
+            {
+                align: 'center'
+            }
+        );
 
-    doc.text(
-        `Kode Booking : ${booking.id}`
+    // QR
+    const qrUrl =
+        `https://web-bioskop.onrender.com/ticket/${booking.id}`;
+
+    const qrImage =
+        await QRCode.toDataURL(
+            qrUrl
+        );
+
+    doc.image(
+        Buffer.from(
+            qrImage.split(',')[1],
+            'base64'
+        ),
+        140,
+        90,
+        {
+            width: 120
+        }
     );
 
-    doc.text(
-        `Nama : ${booking.customerName}`
+    let y = 250;
+
+    function field(
+        label,
+        value
+    ) {
+
+        doc
+            .fontSize(10)
+            .fillColor('#777')
+            .text(
+                label,
+                45,
+                y
+            );
+
+        y += 18;
+
+        doc
+            .fontSize(12)
+            .fillColor('#111')
+            .text(
+                value,
+                45,
+                y
+            );
+
+        y += 28;
+
+        doc
+            .strokeColor(
+                '#eeeeee'
+            )
+            .moveTo(
+                45,
+                y
+            )
+            .lineTo(
+                355,
+                y
+            )
+            .stroke();
+
+        y += 15;
+    }
+
+    field(
+        'Kode Booking',
+        booking.id
     );
 
-    doc.text(
-        `Film : ${
-            booking.items
-                .map(
-                    item =>
-                        item.title
-                )
-                .join(', ')
-        }`
+    field(
+        'Nama',
+        booking.customerName
     );
 
-    doc.text(
-        `Studio : ${
-            booking.items[0]
-                ?.studio
-        }`
+    field(
+        'Film',
+        booking.items[0].title
     );
 
-    doc.text(
-        `Jadwal : ${
-            booking.items[0]
-                ?.schedule
-        }`
+    field(
+        'Studio',
+        booking.items[0].studio
     );
 
-    doc.text(
-        `Kursi : ${
-            booking.items
-                .flatMap(
-                    item =>
-                        item.seats
-                )
-                .join(', ')
-        }`
+    field(
+        'Jadwal',
+        `${booking.items[0].schedule} WIB`
     );
 
-    doc.text(
-        `Total : Rp${booking.total.toLocaleString(
+    field(
+        'Kursi',
+        booking.items[0].seats.join(
+            ', '
+        )
+    );
+
+    field(
+        'Total Pembayaran',
+        `Rp${booking.total.toLocaleString(
             'id-ID'
         )}`
     );
 
-    doc.moveDown();
-
-    doc.image(
-        qrBuffer,
-        {
-            fit: [
-                180,
-                180
-            ],
-            align:
-                'center'
-        }
-    );
+    doc
+        .moveDown()
+        .fontSize(11)
+        .fillColor('#666')
+        .text(
+            'Tunjukkan QR Code ini kepada petugas bioskop',
+            {
+                align: 'center'
+            }
+        );
 
     doc.end();
 
@@ -1138,7 +1212,7 @@ async function sendWhatsAppTicket(
                 );
 
         const pdfUrl =
-            `https://cinemaku.onrender.com${booking.ticketPdf}`;
+            `https://web-bioskop.onrender.com/uploads/${booking.id}.pdf`;
 
         const message =
 `🎬 CinemaKu
