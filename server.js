@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -1121,6 +1123,90 @@ app.delete(
 
 });
 
+//kirim pdf ke wa
+
+async function sendWhatsAppTicket(
+    booking
+) {
+
+    try {
+
+        let phone =
+            booking.phoneNumber
+                .replace(
+                    /^0/,
+                    '62'
+                );
+
+        const pdfUrl =
+            `https://cinemaku.onrender.com${booking.ticketPdf}`;
+
+        const message =
+`🎬 CinemaKu
+
+Pembayaran berhasil dikonfirmasi.
+
+Kode Booking:
+${booking.id}
+
+Film:
+${booking.items
+    .map(
+        item =>
+            item.title
+    )
+    .join(', ')}
+
+Studio:
+${booking.items[0].studio}
+
+Jadwal:
+${booking.items[0].schedule}
+
+E-ticket PDF terlampir.
+
+Terima kasih.`;
+
+        await axios.post(
+            'https://api.fonnte.com/send',
+            {
+                target:
+                    phone,
+
+                message,
+
+                file:
+                    pdfUrl
+            },
+            {
+                headers: {
+                    Authorization:
+                        process.env
+                            .FONNTE_TOKEN
+                }
+            }
+        );
+
+        console.log(
+            'WA berhasil dikirim'
+        );
+
+    }
+
+    catch (error) {
+
+        console.log(
+            'Gagal kirim WA'
+        );
+
+        console.log(
+            error.response?.data
+        );
+
+    }
+
+}
+
 
 
 
@@ -1321,29 +1407,9 @@ app.patch(
             booking
         );
 
-        const message =
-`🎬 CinemaKu
-
-Pembayaran berhasil dikonfirmasi.
-
-Kode Booking:
-${booking.id}
-
-Film:
-${booking.items
-    .map(item => item.title)
-    .join(', ')}
-
-Silakan download e-ticket:
-http://localhost:3000${booking.ticketPdf}`;
-
-const phone =
-    booking.phoneNumber
-        .replace(/^0/, '62');
-
-const waLink =
-    `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
+        await sendWhatsAppTicket(
+    booking
+);
         writeJson(
             bookingsFile,
             bookings
