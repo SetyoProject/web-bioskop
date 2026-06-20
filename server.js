@@ -430,10 +430,10 @@ async function generateTicketPdf(
         );
 
     const doc =
-        new PDFDocument({
-            size: 'A5',
-            margin: 30
-        });
+    new PDFDocument({
+        size: [420, 700],
+        margin: 25
+    });
 
     doc.pipe(
         fs.createWriteStream(
@@ -457,7 +457,7 @@ async function generateTicketPdf(
         .fontSize(24)
         .fillColor('#dc2626')
         .text(
-            '🎬 CinemaKu',
+            'CinemaKu',
             {
                 align: 'center'
             }
@@ -596,7 +596,199 @@ async function generateTicketPdf(
     booking.ticketPdf =
         `/uploads/${fileName}`;
 }
+async function generateTicketPdf(
+    booking
+) {
 
+    const fileName =
+        `${booking.id}.pdf`;
+
+    const filePath =
+        path.join(
+            __dirname,
+            'public',
+            'uploads',
+            fileName
+        );
+
+    const doc =
+        new PDFDocument({
+            size: [420, 650],
+            margin: 25
+        });
+
+    doc.pipe(
+        fs.createWriteStream(
+            filePath
+        )
+    );
+
+    // Card
+    doc
+        .roundedRect(
+            20,
+            20,
+            380,
+            600,
+            20
+        )
+        .stroke('#dddddd');
+
+    // Header
+    doc
+        .fontSize(24)
+        .fillColor('#dc2626')
+        .text(
+            'CinemaKu',
+            {
+                align:
+                    'center'
+            }
+        );
+
+    doc
+        .moveDown(0.2)
+        .fontSize(12)
+        .fillColor('#888')
+        .text(
+            'E-Ticket Bioskop',
+            {
+                align:
+                    'center'
+            }
+        );
+
+    // QR Code
+    const qrUrl =
+        `https://web-bioskop.onrender.com/ticket/${booking.id}`;
+
+    const qrImage =
+        await QRCode.toDataURL(
+            qrUrl
+        );
+
+    doc.image(
+        Buffer.from(
+            qrImage
+                .split(',')[1],
+            'base64'
+        ),
+        160,
+        85,
+        {
+            width: 100
+        }
+    );
+
+    let y = 230;
+
+    function field(
+        label,
+        value
+    ) {
+
+        doc
+            .fontSize(10)
+            .fillColor('#666')
+            .text(
+                label,
+                50,
+                y,
+                {
+                    width: 110
+                }
+            );
+
+        doc
+            .fontSize(11)
+            .fillColor('#111')
+            .text(
+                `: ${value}`,
+                150,
+                y,
+                {
+                    width: 200
+                }
+            );
+
+        y += 22;
+
+        doc
+            .strokeColor(
+                '#eeeeee'
+            )
+            .moveTo(
+                50,
+                y
+            )
+            .lineTo(
+                350,
+                y
+            )
+            .stroke();
+
+        y += 12;
+    }
+
+    field(
+        'Kode Booking',
+        booking.id
+    );
+
+    field(
+        'Nama',
+        booking.customerName
+    );
+
+    field(
+        'Film',
+        booking.items[0].title
+    );
+
+    field(
+        'Studio',
+        booking.items[0].studio
+    );
+
+    field(
+        'Jadwal',
+        `${booking.items[0].schedule} WIB`
+    );
+
+    field(
+        'Kursi',
+        booking.items[0].seats.join(
+            ', '
+        )
+    );
+
+    field(
+        'Total',
+        `Rp${booking.total.toLocaleString(
+            'id-ID'
+        )}`
+    );
+
+    // Footer
+    doc
+        .fontSize(11)
+        .fillColor('#666')
+        .text(
+            'Tunjukkan QR Code ini kepada petugas bioskop',
+            50,
+            y + 25,
+            {
+                width: 300,
+                align:
+                    'center'
+            }
+        );
+
+    doc.end();
+
+    booking.ticketPdf =
+        `/uploads/${fileName}`;
+}
 //post booking
 app.post('/api/bookings', (req, res) => {
 
@@ -1206,10 +1398,17 @@ async function sendWhatsAppTicket(
 
         let phone =
             booking.phoneNumber
-                .replace(
-                    /^0/,
-                    '62'
-                );
+                .replace(/\D/g, '');
+
+        if (
+            phone.startsWith('0')
+        ) {
+
+            phone =
+                '62' +
+                phone.slice(1);
+
+        }
 
         const pdfUrl =
             `https://web-bioskop.onrender.com/uploads/${booking.id}.pdf`;
@@ -1238,26 +1437,43 @@ ${booking.items[0].schedule}
 
 E-ticket PDF terlampir.
 
-Terima kasih.`;
+Terima kasih dan selamat menonton 🍿`;
 
-        await axios.post(
-            'https://api.fonnte.com/send',
-            {
-                target:
-                    phone,
+        console.log(
+            'Nomor:',
+            phone
+        );
 
-                message,
+        console.log(
+            'PDF:',
+            pdfUrl
+        );
 
-                file:
-                    pdfUrl
-            },
-            {
-                headers: {
-                    Authorization:
-                        process.env
-                            .FONNTE_TOKEN
+        const response =
+            await axios.post(
+                'https://api.fonnte.com/send',
+                {
+                    target:
+                        phone,
+
+                    message,
+
+                    file: [
+                        pdfUrl
+                    ]
+                },
+                {
+                    headers: {
+                        Authorization:
+                            process.env
+                                .FONNTE_TOKEN
+                    }
                 }
-            }
+            );
+
+        console.log(
+            'FONNTE:',
+            response.data
         );
 
         console.log(
