@@ -1196,3 +1196,30 @@ footer p {
     color: white;
     cursor: pointer;
 }
+
+.payment-info {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 5px solid #dc2626;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.payment-info h3 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.payment-info p {
+    color: #d1d5db;
+    font-size: 12px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+}
+
+.payment-info p:last-child {
+    margin-bottom: 0;
+}

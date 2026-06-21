@@ -1,47 +1,51 @@
 [
   {
     "id": 1,
-    "title": "Avengers Endgame",
+    "title": "Avengers: Endgame",
     "genre": "Action",
-    "duration": 180,
-    "schedule": "19:00",
-    "price": 50000,
-    "availableSeats": 86,
-    "poster": "https://picsum.photos/300/450",
-    "createdAt": "2026-06-19"
+    "duration": "181",
+    "schedule": "13:00",
+    "price": "50000",
+    "availableSeats": "80",
+    "poster": "/uploads/avengers-endgame.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
   },
   {
     "id": 2,
-    "title": "Spider-Man No Way Home",
+    "title": "Spider-Man: No Way Home",
     "genre": "Action",
-    "duration": 148,
-    "schedule": "14:00",
-    "price": 45000,
-    "availableSeats": 116,
-    "poster": "https://picsum.photos/300/451",
-    "createdAt": "2026-06-19"
+    "duration": "148",
+    "schedule": "15:30",
+    "price": "45000",
+    "availableSeats": "75",
+    "poster": "/uploads/spiderman-no-way-home.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
   },
   {
     "id": 3,
     "title": "The Conjuring",
     "genre": "Horror",
-    "duration": 112,
-    "schedule": "21:00",
-    "price": 40000,
-    "availableSeats": 79,
-    "poster": "https://picsum.photos/300/452",
-    "createdAt": "2026-06-19"
+    "duration": "112",
+    "schedule": "19:00",
+    "price": "50000",
+    "availableSeats": "70",
+    "poster": "/uploads/the-conjuring.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
   },
   {
     "id": 4,
-    "title": "Frozen II",
-    "genre": "Animation",
-    "duration": 103,
-    "schedule": "10:00",
-    "price": 35000,
-    "availableSeats": 150,
-    "poster": "https://picsum.photos/300/453",
-    "createdAt": "2026-06-19"
+    "title": "The Nun",
+    "genre": "Horror",
+    "duration": "96",
+    "schedule": "20:30",
+    "price": "50000",
+    "availableSeats": "65",
+    "poster": "/uploads/the-nun.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
   },
   {
     "id": 5,
@@ -51,22 +55,44 @@
     "schedule": "16:30",
     "price": "55000",
     "availableSeats": "65",
-    "poster": "/uploads/1781904661173.jpg",
-    "createdAt": "2026-06-19",
-    "updatedAt": "2026-06-19T21:31:01.198Z"
+    "poster": "/uploads/interstellar.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
   },
   {
     "id": 6,
-    "title": "zcey",
-    "genre": "asc",
-    "duration": "12",
-    "schedule": "12.11",
-    "price": "1212112",
-    "availableSeats": "12",
-    "label": "",
-    "description": "",
-    "poster": "/uploads/1781904335905.jpg",
-    "createdAt": "2026-06-19T20:59:30.818Z",
-    "updatedAt": "2026-06-19T21:25:35.908Z"
+    "title": "Inside Out 2",
+    "genre": "Animation",
+    "duration": "96",
+    "schedule": "14:00",
+    "price": "40000",
+    "availableSeats": "90",
+    "poster": "/uploads/inside-out-2.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
+  },
+  {
+    "id": 7,
+    "title": "Frozen II",
+    "genre": "Animation",
+    "duration": "103",
+    "schedule": "11:00",
+    "price": "40000",
+    "availableSeats": "100",
+    "poster": "/uploads/frozen-2.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
+  },
+  {
+    "id": 8,
+    "title": "Top Gun: Maverick",
+    "genre": "Action",
+    "duration": "130",
+    "schedule": "18:00",
+    "price": "55000",
+    "availableSeats": "70",
+    "poster": "/uploads/top-gun-maverick.jpg",
+    "createdAt": "2026-06-21",
+    "updatedAt": "2026-06-21T10:00:00.000Z"
   }
 ]
