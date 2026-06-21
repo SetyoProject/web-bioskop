@@ -1,1 +1,31 @@
-[]
+[
+  {
+    "id": "BK-20260621-4283",
+    "customerName": "ewfsdg",
+    "phoneNumber": "dgs",
+    "paymentMethod": "Cash di Kasir",
+    "items": [
+      {
+        "movieId": 1,
+        "title": "Avengers: Endgame",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          2
+        ],
+        "price": "50000",
+        "quantity": 1,
+        "subtotal": 50000
+      }
+    ],
+    "total": 50000,
+    "status": "Menunggu konfirmasi admin",
+    "paymentStatus": "paid",
+    "ticketStatus": "Belum Digunakan",
+    "isUsed": false,
+    "scanTime": null,
+    "ticketPdf": "/uploads/BK-20260621-4283.pdf",
+    "createdAt": "2026-06-21T17:22:25.770Z",
+    "updatedAt": "2026-06-21T17:22:54.779Z"
+  }
+]

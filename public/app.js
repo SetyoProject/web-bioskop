@@ -408,9 +408,7 @@ async function submitCheckout(
             ),
 
         paymentMethod:
-            formData.get(
-                'paymentMethod'
-            ),
+        'Cash di Kasir',
 
         items:
             cart.map(item => ({
