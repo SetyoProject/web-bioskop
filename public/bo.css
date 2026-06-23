@@ -1,97 +1,197 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 body {
+    min-height: 100vh;
     background:
         linear-gradient(
             135deg,
+            #0f172a,
             #111827,
-            #1f2937
+            #1e293b
         );
-    padding: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
 }
 
 .success-card {
-    max-width: 600px;
-    margin: 60px auto;
-    padding: 40px;
+    width: 100%;
+    max-width: 760px;
+
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 30px;
+    padding: 50px;
+
     text-align: center;
+
     box-shadow:
-        0 15px 40px
-        rgba(0, 0, 0, 0.15);
+        0 25px 60px
+        rgba(0, 0, 0, 0.35);
 }
 
 .success-icon {
     font-size: 70px;
     margin-bottom: 20px;
-    color: #dc2626;
 }
 
 .success-card h1 {
     color: #111827;
-    margin-bottom: 10px;
+    font-size: 42px;
+    margin-bottom: 15px;
 }
 
 .success-text {
     color: #6b7280;
-    margin-bottom: 30px;
-    line-height: 1.7;
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+.success-text strong {
+    color: #dc2626;
 }
 
 .booking-code-box {
-    background: #fef2f2;
-    border: 2px dashed #dc2626;
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 30px;
+    background: #fff5f5;
+    border: 2px dashed #ef4444;
+    border-radius: 25px;
+
+    padding: 40px;
+    margin-bottom: 35px;
 }
 
 .booking-code-box span {
     display: block;
     color: #6b7280;
-    margin-bottom: 10px;
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 
 .booking-code-box h2 {
     color: #dc2626;
-    font-size: 32px;
-    letter-spacing: 3px;
+    font-size: 40px;
     font-weight: 700;
+    letter-spacing: 4px;
+
+    word-break: break-word;
 }
 
 .instruction-box {
-    background: #f9fafb;
-    border-left: 5px solid #f59e0b;
-    border-radius: 15px;
-    padding: 20px;
+    background: #f8fafc;
+
+    border-left: 6px solid #f59e0b;
+    border-radius: 20px;
+
+    padding: 30px;
     text-align: left;
-    margin-bottom: 30px;
+
+    margin-bottom: 40px;
 }
 
 .instruction-box p {
-    margin-bottom: 15px;
     color: #374151;
-    line-height: 1.8;
+    font-size: 17px;
+    line-height: 1.9;
+    margin-bottom: 18px;
 }
 
 .instruction-box p:last-child {
     margin-bottom: 0;
 }
 
+.instruction-box strong {
+    color: #111827;
+}
+
 .home-btn {
     display: inline-block;
+
     background: #dc2626;
     color: #ffffff;
+
     text-decoration: none;
-    padding: 14px 30px;
-    border-radius: 12px;
+    font-size: 17px;
     font-weight: 600;
-    transition: all 0.3s ease;
+
+    padding: 16px 40px;
+    border-radius: 16px;
+
+    transition: 0.3s;
 }
 
 .home-btn:hover {
-    background: #991b1b;
-    transform: translateY(-3px);
+    background: #b91c1c;
+
+    transform: translateY(-4px);
+
     box-shadow:
-        0 8px 20px
-        rgba(220, 38, 38, 0.3);
+        0 12px 30px
+        rgba(220, 38, 38, 0.35);
+}
+
+@media (max-width: 768px) {
+
+    .success-card {
+        padding: 35px 25px;
+    }
+
+    .success-icon {
+        font-size: 55px;
+    }
+
+    .success-card h1 {
+        font-size: 32px;
+    }
+
+    .success-text {
+        font-size: 16px;
+    }
+
+    .booking-code-box h2 {
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+
+    .instruction-box p {
+        font-size: 15px;
+    }
+
+    .home-btn {
+        width: 100%;
+    }
+}
+.booking-code-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.copy-btn {
+    background: #dc2626;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 12px;
+
+    padding: 10px 18px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: .3s;
+}
+
+.copy-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
 }

@@ -23,15 +23,15 @@
     <aside
         class="sidebar">
         <div class="logo">
-            🎬 CinemaKu
+            CinemaKu
         </div>
         <nav>
-            <a href="/panel-admin" class="active">
+            <a href="/panel-admin" >
                 📊 Dashboard
             </a>
 
             <a
-                href="/panel-admin/transaksi"
+                href="/panel-admin/transaksi" class="active"
             >
                 🎟️ Transaksi
             </a>
@@ -47,7 +47,7 @@
         <button
             id="logoutButton"
         >
-            🚪 Logout
+             Logout
         </button>
 
     </aside>
@@ -69,6 +69,20 @@
         <section class="box table-section">
 
             <h2>Daftar Transaksi</h2>
+
+            <div class="search-box">
+
+    <input
+        type="text"
+        id="searchBooking"
+        placeholder="Cari kode booking..."
+    >
+
+    <button id="searchButton">
+         Cari
+    </button>
+
+</div>
 
             <table>
 
@@ -121,6 +135,48 @@ menuToggle?.addEventListener(
         );
     }
 );
+
+const searchInput =
+    document.getElementById(
+        'searchBooking'
+    );
+
+const searchButton =
+    document.getElementById(
+        'searchButton'
+    );
+
+searchButton?.addEventListener(
+    'click',
+    searchBooking
+);
+
+searchInput?.addEventListener(
+    'keyup',
+    searchBooking
+);
+
+function searchBooking() {
+
+    const keyword =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+    const filtered =
+        allBookings.filter(
+            booking =>
+                booking.id
+                    .toLowerCase()
+                    .includes(
+                        keyword
+                    )
+        );
+
+    renderTransactions(
+        filtered
+    );
+}
 
 </script>
 

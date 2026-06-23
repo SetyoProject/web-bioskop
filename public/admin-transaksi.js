@@ -21,9 +21,12 @@ async function fetchTransactions() {
             '/api/admin/bookings'
         );
 
-    const bookings =
+        const bookings =
         await response.json();
-
+        
+        allBookings =
+        bookings;
+        
     renderTransactions(bookings);
 }
 
@@ -160,5 +163,7 @@ function viewTicket(id) {
     );
 
 }
+
+let allBookings = [];
 
 fetchTransactions();

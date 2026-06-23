@@ -27,5 +27,62 @@
     "ticketPdf": "/uploads/BK-20260621-4283.pdf",
     "createdAt": "2026-06-21T17:22:25.770Z",
     "updatedAt": "2026-06-21T17:22:54.779Z"
+  },
+  {
+    "id": "BK-20260623-1431",
+    "customerName": "erwin",
+    "phoneNumber": "098765",
+    "paymentMethod": "Cash di Kasir",
+    "items": [
+      {
+        "movieId": 2,
+        "title": "Spider-Man: No Way Home",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          1
+        ],
+        "price": "45000",
+        "quantity": 1,
+        "subtotal": 45000
+      }
+    ],
+    "total": 45000,
+    "status": "Menunggu konfirmasi admin",
+    "paymentStatus": "pending",
+    "ticketStatus": "-",
+    "isUsed": false,
+    "scanTime": null,
+    "ticketPdf": null,
+    "createdAt": "2026-06-23T17:59:10.538Z"
+  },
+  {
+    "id": "BK-20260623-6170",
+    "customerName": "Aditya qwerty",
+    "phoneNumber": "085728433196",
+    "paymentMethod": "Cash di Kasir",
+    "items": [
+      {
+        "movieId": 4,
+        "title": "The Nun",
+        "studio": "Studio 1",
+        "schedule": "13:00",
+        "seats": [
+          19,
+          20
+        ],
+        "price": "50000",
+        "quantity": 2,
+        "subtotal": 100000
+      }
+    ],
+    "total": 100000,
+    "status": "Menunggu konfirmasi admin",
+    "paymentStatus": "pending",
+    "ticketStatus": "-",
+    "isUsed": false,
+    "scanTime": null,
+    "ticketPdf": null,
+    "createdAt": "2026-06-23T19:06:02.010Z"
   }
 ]

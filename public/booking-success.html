@@ -28,6 +28,14 @@
 
         <h2 id="bookingId">
         </h2>
+        <button
+            id="copyButton"
+            class="copy-btn">
+
+            📋 Copy
+        </button>
+
+
 
     </div>
 
@@ -45,7 +53,7 @@
 
         <p>
             📄 Setelah pembayaran dikonfirmasi admin,
-            <strong>E-Ticket PDF beserta QR Code</strong>
+            <strong>E-Ticket PDF</strong>
             akan dikirim otomatis ke WhatsApp Anda.
         </p>
 
@@ -74,6 +82,33 @@ document.getElementById(
     'bookingId'
 ).textContent =
     bookingId;
+
+    const copyButton =
+    document.getElementById(
+        'copyButton'
+    );
+
+copyButton.addEventListener(
+    'click',
+    async () => {
+
+        await navigator.clipboard
+            .writeText(
+                bookingId
+            );
+
+        copyButton.textContent =
+            '✅';
+
+        setTimeout(() => {
+
+            copyButton.textContent =
+                '📋 Copy';
+
+        }, 1500);
+
+    }
+);
 
 </script>
 </body>
