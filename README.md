@@ -1,3 +1,13 @@
+
+##Kelompok 23
+
+1. Muhammad Ibnu Rafli 202451128
+2. Aditya Dwi Pratama 202451135
+3. Muhammad Tri Setiyo Utomo 202451136
+4. Windy Ayu Indo Pratiwi 202451151
+
+
+
 # 🎬 CinemaKu
 
 **Website Pemesanan Tiket Bioskop Berbasis Web**
